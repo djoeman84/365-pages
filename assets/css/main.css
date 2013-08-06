@@ -38,10 +38,17 @@ ul {
 
 li {
 	display: inline;
+}
+
+.social-link-href {
 	opacity: 0.3;
 	filter: alpha(opacity=30);/* For IE8 and earlier */
 }
 
+.social-link-href:hover {
+	opacity: 1.0;
+	filter: alpha(opacity=100);
+}
 
 
 /*
@@ -70,6 +77,13 @@ li {
 	text-align: center;
 	opacity:0.6;
 	filter:alpha(opacity=60); /* For IE8 and earlier */
+}
+
+.day-block:hover {
+	box-shadow: 0 0 8px #33D6FF;
+	z-index:10000;
+	opacity: 0.8;
+	filter: alpha(opacity=80);/* For IE8 and earlier */
 }
 
 .day-block > .date {

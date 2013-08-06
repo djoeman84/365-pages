@@ -1,3 +1,18 @@
+function run_random_text_generator (argument) {
+	var corpus = parse_corpus($("#input-text").val());
+	var length = $("#output-length").val();
+	var avg_p  = $("#output-p-length").val();
+	var text = build_text(corpus, length, avg_p);
+	var title = build_text(corpus, 1, 1, false, true);
+	var count = 0;
+	while (count < 20 && (title.length > 150 || title.length < 20)) {
+		title = build_text(corpus, 1, 1, false, true);
+		count++;
+	}
+	$("#article-title").html(escape(title));
+	$("#output-p").html(escape(text));
+}
+
 function default_param (check_val, default_val) {
 	return (typeof check_val == 'undefined' ? default_val : check_val);
 }
@@ -86,26 +101,3 @@ function parse_corpus (corpus_text) {
 	var corpus = new Corpus_statistic(freq, upcoming, begin_sentence);
 	return corpus;
 }
-
-$(document).ready(function () {
-	$("#corpus-selection").on("change",function (argument) {
-		console.log($("#corpus-selection option:selected").val());
-	})
-	$("#submit-button").on("click", function () {
-		var corpus = parse_corpus($("#input-text").val());
-		console.log("parsed");
-		var length = $("#output-length").val();
-		var avg_p  = $("#output-p-length").val();
-		var text = build_text(corpus, length, avg_p);
-		console.log("built text");
-		var title = build_text(corpus, 1, 1, false, true);
-		var count = 0;
-		while (count < 20 && (title.length > 150 || title.length < 20)) {
-			title = build_text(corpus, 1, 1, false, true);
-			count++;
-		}
-		console.log("built title");
-		$("#article-title").html(escape(title));
-		$("#output-p").html(escape(text));
-	});
-});

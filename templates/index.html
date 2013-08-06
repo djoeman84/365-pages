@@ -13,32 +13,30 @@
 		<div class="jumbo-title">365 Pages</div>
 		<div class="jumbo-tag">One Page a day for a year</div>
 		<ul class="social-links">
-			<li class="link"><a href="https://www.facebook.com/joe.delgado3"><img src="/img/webicon-facebook-s.png"></a></li>
-			<li class="link"><a href="https://github.com/djoeman84"><img src="/img/webicon-github-s.png"></a></li>
-			<li class="link"><a href="http://www.linkedin.com/pub/joseph-delgado/32/bb9/8bb"><img src="/img/webicon-linkedin-s.png"></a></li>
-			<li class="link"><a href="http://www.quora.com/Joseph-Delgado"><img src="/img/webicon-quora-s.png"></a></li>
-			<li class="link"><a href="https://twitter.com/soy_chupacabra"><img src="/img/webicon-twitter-s.png"></a></li>
+			<li class="link"><a href="https://www.facebook.com/joe.delgado3" class="social-link-href"><img src="/img/webicon-facebook-s.png"></a></li>
+			<li class="link"><a href="https://github.com/djoeman84" class="social-link-href"><img src="/img/webicon-github-s.png"></a></li>
+			<li class="link"><a href="http://www.linkedin.com/pub/joseph-delgado/32/bb9/8bb" class="social-link-href"><img src="/img/webicon-linkedin-s.png"></a></li>
+			<li class="link"><a href="http://www.quora.com/Joseph-Delgado" class="social-link-href"><img src="/img/webicon-quora-s.png"></a></li>
+			<li class="link"><a href="https://twitter.com/soy_chupacabra" class="social-link-href"><img src="/img/webicon-twitter-s.png"></a></li>
 		</ul>
 		
 	</div>
 	<div id="wrapper">
-		<div class="padding_wrap">
-			<div class="center-container">
-				<div class="days">
-					{% for day in days %}
-					<div class="day-block" id="{{ day.href }}">
-						<div class="date">{{ day.date }}</div>
-						<div class="day">{{ day.day }}</div>
-					</div>
-					{% endfor %}
-				</div>
+		<div class="center-container">
+			<div class="days">
+				{% for day in days %}
+				<a href="{{ day.href }}" class="day-block" id="{{ day.id }}">
+					<div class="date">{{ day.date }}</div>
+					<div class="day">{{ day.day }}</div>
+				</a>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
-	<div id="info-panel">
+	<a id="info-panel" href="#">
 		<div id="info-title">365 Pages</div>
 		<div id="info-desc">Hover over dates to see info</div>
-	</div>
+	</a>
 	
 </body>
 </html>

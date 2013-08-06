@@ -49,19 +49,11 @@ function format_for_direction (output_language) {
 	}
 }
 
-$(document).ready(function () {
-	$("#translate-button").on("mouseenter", function () {
-		$(this).css("background-color","black");
-	})
-	$("#translate-button").on("mouseleave", function () {
-		$(this).removeAttr("style");
-	})
-	$("#translate-button").on("click", function () {
-		var corpus = $("#input-text").val();
-		console.log(corpus);
-		var output_language = $("#language-to option:selected").val();
-		var input_language = $("#language-from option:selected").val();
-		format_for_direction(output_language);
-		$("#output-text").html(get_translation(corpus, input_language, output_language));
-	});
-});
+function translate () {
+	var corpus = $("#input-text").val();
+	console.log(corpus);
+	var output_language = $("#language-to option:selected").val();
+	var input_language = $("#language-from option:selected").val();
+	format_for_direction(output_language);
+	$("#output-text").html(get_translation(corpus, input_language, output_language));
+}

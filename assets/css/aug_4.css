@@ -11,6 +11,8 @@ textarea {
 	width: 100px;
 	color: white;
 	text-align: center;
+	border-radius: 4px;
+	text-decoration: none;
 }
 
 p {

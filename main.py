@@ -42,7 +42,7 @@ class MainHandler(Handler):
 		return '{"%s"}'
 	def get_info(self):
 		pages = db.GqlQuery("SELECT * FROM Page ORDER BY date ASC").fetch(limit=365)
-		days = [{"href":str(page.key()).replace('-','_'),"date":str(page.date.day) + " " + months[page.date.month],"day":days_of_week[page.date.weekday()]} for page in pages]
+		days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(page.date.day) + " " + months[page.date.month],"day":days_of_week[page.date.weekday()]} for page in pages]
 		data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s"}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href) for page in pages])
 		return data, days
 	def render_page(self):

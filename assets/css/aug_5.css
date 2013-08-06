@@ -24,5 +24,12 @@
 #translate-button {
 	background-color: blue;
 	color: white;
-	cursor: default;
+}
+
+#translate-button:hover {
+	background-color: black;
+}
+
+a {
+	text-decoration: none;
 }
