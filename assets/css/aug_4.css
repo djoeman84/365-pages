@@ -1,0 +1,34 @@
+textarea {
+	margin: auto;
+	display: block;
+}
+
+#submit-button {
+	margin: auto;
+	display: block;
+	background-color: blue;
+	height: 20px;
+	width: 100px;
+	color: white;
+	text-align: center;
+}
+
+p {
+	display: block;
+	text-indent: 3em;
+}
+
+label, input {
+	display: inline-block;
+	margin: auto;
+}
+
+body {
+	margin-left: 60px;
+	margin-right: 60px;
+}
+
+#output {
+	margin-left: 10px;
+	margin-right: 10px;
+}

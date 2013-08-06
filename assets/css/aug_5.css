@@ -1,0 +1,28 @@
+.box {
+	width: 49%;
+	_width: 49%;
+	height: 150px;
+	resize: none;
+	display: inline-block;
+	position: relative;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+#output-text {
+	background-color: #E8E8E8;
+	border: 2px solid;
+	border-color: #F0F0F0;
+}
+
+#translate-button {
+	background-color: blue;
+	color: white;
+	cursor: default;
+}

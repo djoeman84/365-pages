@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Random Text</title>
+	<link rel="stylesheet" type="text/css" href="/css/aug_4.css">
+	<!--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>-->
+	<script src="/js/jquery.js" type="text/javascript"></script>
+	<script src="/js/aug_4.js" type="text/javascript"></script>
+</head>
+<body>
+	<textarea id="input-text" rows="10" cols="50" placeholder="Copy and paste a large corpus text into this text area or select one from the list below"></textarea>
+	<label>Sentence Length: <input id="output-length" type="number" value=1000 min=1></label>
+	<label>Average Paragraph: <input id="output-p-length" type="number" value=5 min=2></label>
+	<label>Corpus to process:
+		<select id="corpus-selection">
+			<option value="custom">Custom Text</option>
+			<option value="moby">Moby Dick</option>
+			<option value="nyt">NYT</option>
+		</select>
+	</label>
+	<hr>
+	<div id="submit-button">Create Article</div>
+	<h2 id="article-title"></h2>
+	<img src=""><p id="output-p"></p>
+</body>
+</html>
