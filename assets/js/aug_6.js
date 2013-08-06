@@ -6,30 +6,6 @@
  function Drawing (canvas, context) {
  	this.canvas = canvas;
  	this.context = context;
-
- 	//methods
- 	this.update = function() {
- 		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
- 		var dead = [];
- 		for (var i = 0; i < balls.length; i++) {
- 			ball = balls[i];
- 			this.context.beginPath();
- 			ball.check_for_bounce();
- 			ball.update();
- 			if (ball.is_dead()) dead.push(i);//ball.dy = 0;
- 			this.context.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI, false);
- 			this.context.fillStyle = ball.style;
- 			this.context.fill();
- 		};
- 		
- 		for (var i = dead.length -1; i >= 0 ; i--) { //reverse so that array does not collapse on remaining elements
- 			balls.splice(dead[i],1);
- 		};
- 	}
- 	this.resize_canvas = function() {
-		this.context.canvas.width = window.innerWidth;
-		this.context.canvas.height = window.innerHeight;
-	}
  }
  function Ball (x, y, r, dx, dy, style) {
  	this.x = x;
@@ -66,7 +42,8 @@
   *
   */
 var balls = [];
-var main_drawing;
+var canvas;
+var context;
 
 /*
  *   Physics
@@ -95,19 +72,41 @@ function add_circle (x, y) {
 	balls.push(new Ball(x,y,r,dx,dy,style));
 }
 
+function resize_canvas () {
+	context.canvas.width = window.innerWidth;
+	context.canvas.height = window.innerHeight;
+}
+
 function bounce (object, wall) {
 	if (object > wall) return true; //true if object is beyond wall
 }
 
+function update_canvas () {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	var dead = [];
+	for (var i = 0; i < balls.length; i++) {
+		ball = balls[i];
+		context.beginPath();
+		ball.check_for_bounce();
+		ball.update();
+		if (ball.is_dead()) dead.push(i);//ball.dy = 0;
+		context.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI, false);
+		context.fillStyle = ball.style;
+		context.fill();
+	};
+	
+	for (var i = dead.length -1; i >= 0 ; i--) { //reverse so that array does not collapse on remaining elements
+		balls.splice(dead[i],1);
+	};
+}
 
 function init_canvas () {
 	canvas = document.getElementById('main-canvas');
 	context = canvas.getContext('2d');
-	main_drawing = new Drawing(canvas, context);
-	main_drawing.resize_canvas();
-	setInterval(main_drawing.update(), 20);
+	resize_canvas();
+	setInterval(update_canvas, 20);
 }
 
 $(window).resize(function (argument) {
-	main_drawing.resize_canvas();
+	resize_canvas();
 })
