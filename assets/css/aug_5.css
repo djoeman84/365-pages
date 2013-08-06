@@ -22,12 +22,20 @@
 }
 
 #translate-button {
-	background-color: blue;
+	padding-left: 0.4em;
+	padding-right: 0.3em;
+	background-color: #D8D8D8;
+	border: solid 1px;
+	border-color: #C8C8C8;
 	color: white;
+	border-radius: 3em;
+	opacity: 0.50;
+	filter:alpha(opacity=050); /* For IE8 and earlier */
 }
 
-#translate-button:hover {
-	background-color: black;
+#translate-button:hover, #translate-button:focus {
+	opacity: 1.0;
+	filter: alpha(opacity = 100); /* For IE8 and earlier */
 }
 
 a {
