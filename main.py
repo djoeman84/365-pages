@@ -81,8 +81,13 @@ class Aug5Handler(Handler):
 	def get(self):
 		self.render("aug_5.html")
 
+class Aug6Handler(Handler):
+	def get(self):
+		self.render("aug_6.html")
+
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
 	('/4-AUG', Aug4Handler),
-	('/5-AUG', Aug5Handler)
+	('/5-AUG', Aug5Handler),
+	('/6-AUG', Aug6Handler)
 ], debug=True)
