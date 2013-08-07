@@ -48,7 +48,7 @@ ul {
 #arrow-keys {
 	font-size: 25px;
 	position: fixed;
-	color: white;
+	color: #AAEFFF;
 	z-index: 1000;
 	bottom: 5px;
 	right: 10px;
