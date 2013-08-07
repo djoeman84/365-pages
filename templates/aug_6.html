@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Translation Machine</title>
+	<title>Colors!</title>
 	<link rel="stylesheet" type="text/css" href="/css/aug_6.css">
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 	<!--<script src="/js/jquery.js" type="text/javascript"></script>-->
-	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
 	<script src="/js/aug_6.js" type="text/javascript"></script>
 </head>
 <body>
 	<canvas onclick="mouse_clicked(event)"id="main-canvas"></canvas>
 	<div id="control-panel">Control
-		<ul>
-			<li>balls remain<input type="checkbox" id="balls-remain" onclick="check_clicked()"></li>
-			<li>gravity off<input type="checkbox" id="gravity-check" onclick="check_clicked()"></li>
-			<li>friction off<input type="checkbox" id="friction-check" onclick="check_clicked()"></li>
-			<li>up: <span id="up-metric">0</span></li>
-			<li>lr: <span id="lr-metric">0</span></li>
-			<li>(use arrow keys)</li>
+		<ul id="control-panel-list">
+			<li class="c-p-li">balls remain<input type="checkbox" id="balls-remain" onclick="check_clicked()"></li>
+			<li class="c-p-li">gravity off<input type="checkbox" id="gravity-check" onclick="check_clicked()"></li>
+			<li class="c-p-li">friction off<input type="checkbox" id="friction-check" onclick="check_clicked()"></li>
+			<li class="c-p-li">up: <span id="up-metric">0</span></li>
+			<li class="c-p-li">lr: <span id="lr-metric">0</span></li>
+			<li class="c-p-li">(use arrow keys)</li>
 		</ul>
-		
+	</div>
+	<div id="arrow-keys">
+		<ul id="arrow-keys-list">
+			<li class="arrow-keys-li invisible">&lt;</li>
+			<li class="arrow-keys-li up visible" onclick="key_pressed(38)">&lt;</li>
+			<li class="arrow-keys-li invisible">&lt;</li>
+			<li class="arrow-keys-li left visible" onclick="key_pressed(37)">&lt;</li>
+			<li class="arrow-keys-li down visible" onclick="key_pressed(40)">&lt;</li>
+			<li class="arrow-keys-li right visible" onclick="key_pressed(39)">&lt;</li>
+		</ul>
 	</div>
 </body>
 <script type="text/javascript">init_canvas();</script>

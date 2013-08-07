@@ -48,6 +48,7 @@ var balls_remain = false;
 var colors = ["#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#00FFFF", "#FF00FF", "#996699", "#99CCFF", "#FFCC66", "#FF99FF", "#33CCFF"];
 var launch_dx = 0;
 var launch_dy = 0;
+var dir = {'left':37,'right':39,'up':38,'down':40};
 
 /*
  *   Physics
@@ -136,23 +137,37 @@ function check_clicked() {
 	}
 }
 
+function flash_opacity(direction) {
+	var opacity = $('.arrow-keys-li.'+direction).css('opacity');
+	$('.arrow-keys-li.'+direction).animate({opacity:'1.0'}, 100);
+	$('.arrow-keys-li.'+direction).animate({opacity:'0.30'}, 300);
+}
+
+function key_pressed(key) {
+	if (key == dir['left']) { //left
+	   launch_dx--;
+	   flash_opacity('left');
+	} 
+	else if (key == dir['up']) { //up
+	   launch_dy--;
+	   flash_opacity('up');
+	}
+	else if (key == dir['right']) { //right
+	   launch_dx++;
+	   flash_opacity('right');
+	}
+	else if (key == dir['down']) { //down
+	   launch_dy++;
+	   flash_opacity('down');
+	}
+	$("#up-metric").html((-1)*launch_dy);
+	$("#lr-metric").html(launch_dx);
+}
+
 $(window).resize(function (argument) {
 	resize_canvas();
 })
 
 $(document).keydown(function(e){
-    if (e.keyCode == 37) { //left
-       launch_dx--;
-    } 
-    else if (e.keyCode == 38) { //up
-       launch_dy--;
-    }
-    else if (e.keyCode == 39) { //right
-       launch_dx++;
-    }
-    else if (e.keyCode == 40) { //down
-       launch_dy++;
-    }
-    $("#up-metric").html((-1)*launch_dy);
-    $("#lr-metric").html(launch_dx);
+	key_pressed(e.keyCode);
 });

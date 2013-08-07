@@ -12,6 +12,10 @@ body {
 	font-size: 18px;
 }
 
+ul {
+	list-style-type: none;
+}
+
 #control-panel {
 	position: fixed;
 	background-color: #3791A6;
@@ -31,13 +35,83 @@ body {
 	filter:alpha(opacity=100); /* For IE8 and earlier */
 }
 
-ul {
-	list-style-type: none;
+#control-panel-list {
 	font-size: 13px;
 	margin-left: 0px;
 	-webkit-padding-start: 16px;
 }
 
-li {
+.c-p-li {
 	margin-left: 0px;
 }
+
+#arrow-keys {
+	font-size: 25px;
+	position: fixed;
+	color: white;
+	z-index: 1000;
+	bottom: 5px;
+	right: 10px;
+}
+
+#arrow-keys-list {
+	width: 5em;
+}
+
+.arrow-keys-li {
+	border: solid 1px;
+	padding-bottom: 0.2em;
+	padding-top: 0.01em;
+	padding-left: 0.35em;
+	padding-right: 0.35em;
+	font-weight: 500;
+	border-radius: 0.4em;
+	display: inline-block;
+	background-color: #808080;
+	opacity: 0.30;
+	filter:alpha(opacity=030); /* For IE8 and earlier */
+}
+
+.arrow-keys-li.visible {
+	cursor: pointer;
+}
+
+.arrow-keys-li.invisible {
+	cursor: default;
+}
+
+.arrow-keys-li.visible:hover, .arrow-keys-li.visible:focus {
+	opacity: 1.00;
+	filter:alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.invisible {
+	opacity: 0.00;
+	filter:alpha(opacity=000); /* For IE8 and earlier */
+}
+
+
+.up {
+	transform:rotate(90deg);
+	-ms-transform:rotate(90deg); /* IE 9 */
+	-webkit-transform:rotate(90deg); /* Safari and Chrome */
+}
+
+.down {
+	transform:rotate(-90deg);
+	-ms-transform:rotate(-90deg); /* IE 9 */
+	-webkit-transform:rotate(-90deg); /* Safari and Chrome */
+}
+
+.right {
+	transform:rotate(180deg);
+	-ms-transform:rotate(180deg); /* IE 9 */
+	-webkit-transform:rotate(180deg); /* Safari and Chrome */
+}
+
+
+
+
+
+
+
