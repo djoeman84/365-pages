@@ -8,6 +8,7 @@ import webapp2
 import jinja2
 import os
 from google.appengine.ext import db
+import datetime
 
 months = ["NONE","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 days_of_week = ["MON","TUE","WED","THR","FRI","SAT","SUN"]
@@ -22,7 +23,8 @@ class Page(db.Model):
 	title = db.StringProperty(required = True)
 	href = db.LinkProperty(required = True)
 	date = db.DateTimeProperty(auto_now_add = True)
-	desc = db.TextProperty(required=True)
+	desc = db.TextProperty(required = True)
+	tzone= db.IntegerProperty()
 
 
 class Handler(webapp2.RequestHandler):
@@ -36,13 +38,20 @@ class Handler(webapp2.RequestHandler):
 
 
 class MainHandler(Handler):
-	def get_days(self):
-		pass	
+	def get_date(self, page):
+		date = page.date
+		date += datetime.timedelta(hours = -8) #hack way to offset to real timezone
+		#try:
+		#	print "========="+page.tzone
+		#	date += datetime.timedelta(hours = page.tzone)
+		#except:
+		#	print "=========NA"
+		return (date)
 	def get_data(self):
 		return '{"%s"}'
 	def get_info(self):
 		pages = db.GqlQuery("SELECT * FROM Page ORDER BY date ASC").fetch(limit=365)
-		days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(page.date.day) + " " + months[page.date.month],"day":days_of_week[page.date.weekday()]} for page in pages]
+		days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(self.get_date(page).day) + " " + months[self.get_date(page).month],"day":days_of_week[self.get_date(page).weekday()]} for page in pages]
 		data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s"}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href) for page in pages])
 		return data, days
 	def render_page(self):
@@ -58,14 +67,16 @@ class PostHandler(Handler):
 		title = self.request.get("title")
 		href  = self.request.get("href")
 		desc  = self.request.get("desc")
+		tzone = int(self.request.get("tzone"))
 		usr   = self.request.get("usr")
 		passw = self.request.get("pass")
+		print "\n\ntzone: " + str(tzone)
 		if (not passw == password) or (not usr == username):
 			error = "incorrect password"
 			self.render("post.html", error=error)
 			return
-		if title and href and desc:
-			p = Page(title=title, href=href, desc=desc)
+		if title and href and desc and tzone:
+			p = Page(title=title, href=href, desc=desc, tzone=5)
 			p.put()
 			self.redirect("../")
 		else:
@@ -85,9 +96,14 @@ class Aug6Handler(Handler):
 	def get(self):
 		self.render("aug_6.html")
 
+class Aug7Handler(Handler):
+	def get(self):
+		self.render("aug_7.html")
+
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
 	('/4-AUG', Aug4Handler),
 	('/5-AUG', Aug5Handler),
-	('/6-AUG', Aug6Handler)
+	('/6-AUG', Aug6Handler),
+	('/7-AUG', Aug7Handler)
 ], debug=True)

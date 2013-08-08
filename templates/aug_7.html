@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ski Slope!</title>
+	<link rel="stylesheet" type="text/css" href="/css/aug_7.css">
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<!--<script src="/js/jquery.js" type="text/javascript"></script>-->
+	<script src="/js/aug_7.js" type="text/javascript"></script>
+</head>
+<body>
+	<img src="/img/aug_7/BettyBoopSkier-right.png" id="skier-right">
+	<img src="/img/aug_7/BettyBoopSkier-left.png" id="skier-left">
+	<img src="/img/aug_7/christmas_Tree.png" id="tree">
+	<img src="/img/aug_7/donut.png" id="donut">
+	<img src="/img/aug_7/wizard.png" id="wizard">
+	<div class="popup-container">
+		<div class="center-popup">
+			<h1 class="popup-title">Game Over</h1>
+			<a class="popup-a" href="javascript:reset_canvas()">Play Again</a>
+			<div class="popup-body" id="top-scores-title">top scores</div>
+			<form id="get-name">
+				<label>name: <input type="text"></label>
+			</form>
+			<ul>
+				<li></li>
+			</ul>
+		</div>
+	</div>
+	<div id="arrow-keys">
+		<ul id="arrow-keys-list">
+			<li class="arrow-keys-li invisible">&lt;</li>
+			<li class="arrow-keys-li up visible" onclick="key_pressed(38)">&lt;</li>
+			<li class="arrow-keys-li invisible">&lt;</li>
+			<li class="arrow-keys-li left visible" onclick="key_pressed(37)">&lt;</li>
+			<li class="arrow-keys-li down visible" onclick="key_pressed(40)">&lt;</li>
+			<li class="arrow-keys-li right visible" onclick="key_pressed(39)">&lt;</li>
+		</ul>
+	</div>
+	<div class="HUD">
+		<span id="points">0 magical donut points</span>
+	</div>
+	<canvas id="main-canvas"></canvas>
+</body>
+<script type="text/javascript">init_canvas();</script>
+</html>
