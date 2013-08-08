@@ -28,9 +28,9 @@
  				clearInterval(game_interval);
  				break;
  			case 'donut':
- 				points += speed*5;
+ 				score += speed*5;
  				donuts++;
- 				console.log(points);
+ 				console.log(score);
  				break;
  			case 'wizard':
  				speed*=3;
@@ -98,8 +98,9 @@ var likelihood_new_donut = 0.01;
 var likelihood_new_wizard= 0.0005;
 var dir = {'left':37,'right':39,'up':38,'down':40};
 var obs_dict = {'tree':{'elem-id':'tree', 'height':60,'width':50},'donut':{'elem-id':'donut', 'height':60,'width':60},'wizard':{'elem-id':'wizard', 'height':60,'width':60}};
-var points = 0;
+var score = 0;
 var donuts = 0;
+var gps_position;
 var collision_fudge = 5;//number of pixels to fudge collision by
 var obstacle_r = 30; //TEMPORARY!!! ++++=++++++++++
 var obstacle_style = "#FF0000"; //TEMPORARY!!! ++++=++++++++++
@@ -120,7 +121,7 @@ function bounce (object, wall) {
 
 function update_vals () {
 	speed += speed_up;
-	$('#points').html(Math.floor(points) + ' magical donut points  '+ donuts + ' donuts');
+	$('#score').html(Math.floor(score) + ' magical donut score  '+ donuts + ' donuts');
 }
 
 function update_canvas () {
@@ -161,12 +162,13 @@ function update_canvas () {
 function reset_canvas () {
 	clearInterval(game_interval);
 	$('.center-popup').removeAttr('style');
-	points = 0;
+	score = 0;
 	obstacles = [];
 	init_canvas();
 }
 
 function init_canvas () {
+	getLocation();
 	canvas = document.getElementById('main-canvas');
 	context = canvas.getContext('2d');
 	resize_canvas();
@@ -202,6 +204,35 @@ function key_pressed(key) {
 	   player_skier.y+=move_per_click;
 	}
 }
+
+function getLocation() {
+	if (navigator.geolocation){
+		pos = navigator.geolocation.getCurrentPosition(function(pos) {
+			gps_position = pos.coords.latitude + ","+pos.coords.longitude;
+		});
+	}
+	return null;
+}
+
+//POST
+$(document).ready(function () {
+	$("#get-name-input").keyup(function (e) {
+	    if (e.keyCode === 13) {
+	        console.log($("#get-name-input").val());
+	        $.ajax({
+	        	url:'7-AUG',
+	        	type:'POST',
+	        	data: {
+	        		name:$("#get-name-input").val(),
+	        		loc:gps_position,
+	        		score:score,
+	        		donuts:donuts
+	        	}
+	        });
+	    }
+	});
+});
+
 
 $(window).resize(function (argument) {
 	resize_canvas();

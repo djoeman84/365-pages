@@ -9,6 +9,7 @@ import jinja2
 import os
 from google.appengine.ext import db
 import datetime
+import json
 
 months = ["NONE","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 days_of_week = ["MON","TUE","WED","THR","FRI","SAT","SUN"]
@@ -25,6 +26,14 @@ class Page(db.Model):
 	date = db.DateTimeProperty(auto_now_add = True)
 	desc = db.TextProperty(required = True)
 	tzone= db.IntegerProperty()
+
+class TopScore(db.Model):
+	name   = db.StringProperty(required = True)
+	score  = db.IntegerProperty(required = True)
+	donuts = db.IntegerProperty(required = True)
+	date   = db.DateTimeProperty(auto_now_add = True)
+	loc    = db.GeoPtProperty(required = False)
+				
 
 
 class Handler(webapp2.RequestHandler):
@@ -98,7 +107,22 @@ class Aug6Handler(Handler):
 
 class Aug7Handler(Handler):
 	def get(self):
+		top_scores = db.GqlQuery("SELECT * FROM TopScore ORDER BY score DESC").fetch(limit=5)
+		print "scores"
+		for score in top_scores:
+			print score.name
 		self.render("aug_7.html")
+	def post(self):
+		name  = self.request.get("name")
+		loc   = self.request.get("loc")
+		score = int(float(self.request.get("score")))
+		donuts= int(self.request.get("donuts"))
+		if name and score and donuts:
+			if loc:
+				TopScore(name=name,score=score,donuts=donuts,loc=loc).put()
+			else:
+				TopScore(name=name,score=score,donuts=donuts).put()
+		print "post: name-"+name+"\nloc-"+loc+"\nscore-"+str(score)+"\ndonuts-"+str(donuts)
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),

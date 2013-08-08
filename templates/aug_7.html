@@ -18,9 +18,7 @@
 			<h1 class="popup-title">Game Over</h1>
 			<a class="popup-a" href="javascript:reset_canvas()">Play Again</a>
 			<div class="popup-body" id="top-scores-title">top scores</div>
-			<form id="get-name">
-				<label>name: <input type="text"></label>
-			</form>
+			<label id="get-name-form">name: <input type="text" id="get-name-input"></label>
 			<ul>
 				<li></li>
 			</ul>
@@ -37,7 +35,7 @@
 		</ul>
 	</div>
 	<div class="HUD">
-		<span id="points">0 magical donut points</span>
+		<span id="score">0 magical donut points</span>
 	</div>
 	<canvas id="main-canvas"></canvas>
 </body>

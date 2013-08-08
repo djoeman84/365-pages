@@ -48,11 +48,11 @@ img {
 
 
 
-.popup-title, .popup-a, #get-name, .popup-body {
+.popup-title, .popup-a, #get-name-form, .popup-body {
 	text-align: center;
 }
 
-.popup-a, #get-name, .popup-body {
+.popup-a, #get-name-form, .popup-body {
 	color: #A8FFB8;
 	display: block;
 	margin-left: auto;
@@ -63,7 +63,7 @@ img {
 	margin-top: 20px;
 }
 
-#get-name {
+#get-name-form {
 	margin-top: 10px;
 }
 
