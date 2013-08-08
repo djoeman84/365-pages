@@ -24,6 +24,7 @@
  	this.collide = function () {
  		switch (this.type){
  			case 'tree':
+ 				prepare_top_scores();
  				$('.center-popup').css('display', 'block');
  				clearInterval(game_interval);
  				break;
@@ -102,9 +103,20 @@ var score = 0;
 var donuts = 0;
 var gps_position;
 var collision_fudge = 5;//number of pixels to fudge collision by
-var obstacle_r = 30; //TEMPORARY!!! ++++=++++++++++
-var obstacle_style = "#FF0000"; //TEMPORARY!!! ++++=++++++++++
 
+function prepare_top_scores () {
+	var input_name_html = '<input type="text" id="get-name-input">';
+	top_scores = [{'name':'enter your name!','display':input_name_html,'score':score}];
+	for (var i = 0; i < top_scores_from_db.length; i++) {
+		top_scores.push({'name':top_scores_from_db[i].name,'display':top_scores_from_db[i].score,'score':top_scores_from_db[i].score})
+	};
+	top_scores.sort(function (a,b) {
+		return b.score - a.score;
+	});
+	for (var i = 0; i < top_scores.length && i < 5; i++) {
+		$("#get-name-list > #"+i).html(top_scores[i].name + " : "+top_scores[i].display);
+	};
+}
 
 function execute_with_likelihood (likelihood, fn, arg) {
 	if (Math.random() < likelihood) fn(arg);
@@ -216,7 +228,7 @@ function getLocation() {
 
 //POST
 $(document).ready(function () {
-	$("#get-name-input").keyup(function (e) {
+	$("#get-name-list").on('keyup','li > #get-name-input' ,function (e) {
 	    if (e.keyCode === 13) {
 	        console.log($("#get-name-input").val());
 	        $.ajax({
@@ -229,6 +241,7 @@ $(document).ready(function () {
 	        		donuts:donuts
 	        	}
 	        });
+
 	    }
 	});
 });
