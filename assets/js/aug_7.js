@@ -202,7 +202,8 @@ function flash_opacity(direction) {
 }
 
 function key_pressed(key) {
-	if (key == dir['left'] && player_skier.direction === 1) { //left
+	if (key == dir['left'] ){//&& player_skier.direction == 1) { //left
+		console.log('left');
 	   flash_opacity('left');
 	   player_skier.elem_id = "skier-left";
 	   player_skier.direction = -1;
@@ -211,7 +212,7 @@ function key_pressed(key) {
 	   flash_opacity('up');
 	   player_skier.y-=move_per_click;
 	}
-	if (key == dir['right'] && player_skier.direction === -1) { //right
+	if (key == dir['right'] && player_skier.direction == -1) { //right
 	   flash_opacity('right');
 	   player_skier.elem_id = "skier-right";
 	   player_skier.direction = 1;

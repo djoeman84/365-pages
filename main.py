@@ -108,10 +108,11 @@ class Aug6Handler(Handler):
 class Aug7Handler(Handler):
 	def get(self):
 		top_scores = db.GqlQuery("SELECT * FROM TopScore ORDER BY score DESC").fetch(limit=5)
+		data = ','.join(['{"name":"%s","score":"%s","donuts":"%s","date":"%s","loc":"%s"}' %(score.name, score.score, score.donuts, score.date,score.loc) for score in top_scores])
 		print "scores"
 		for score in top_scores:
 			print score.name
-		self.render("aug_7.html")
+		self.render("aug_7.html", data=data)
 	def post(self):
 		name  = self.request.get("name")
 		loc   = self.request.get("loc")
