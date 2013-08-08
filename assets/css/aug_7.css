@@ -49,24 +49,51 @@ img {
 
 
 
-.popup-title, .popup-a, #get-name-list, .popup-body {
+.popup-title, #get-name-list, .popup-body {
 	text-align: center;
 }
 
-.popup-a, #get-name-list, .popup-body {
-	color: #A8FFB8;
+.popup-body {
 	display: block;
+}
+
+#get-name-list, .popup-body {
+	color: #A8FFB8;
 	margin-left: auto;
 	margin-right: auto;
 }
 
+#play-again {
+	font-size: 20px;
+	font-weight: bold;
+}
+
 #top-scores-title {
-	margin-top: 20px;
+	margin-top: 30px;
 }
 
 #get-name-list {
 	margin-top: 10px;
+	margin-bottom: 20px;
+	opacity: 0.40;
+	filter:alpha(opacity=040); /* For IE8 and earlier */
 }
+
+.left-td, .right-td {
+	width: 300px;
+}
+
+
+.right-td {
+	text-align: left;
+	padding-left: 10px;
+}
+
+.left-td {
+	text-align: right;
+	padding-right: 10px;
+}
+
 
 #arrow-keys {
 	font-size: 25px;

@@ -123,7 +123,7 @@ function prepare_top_scores () {
 		return b.score - a.score;
 	});
 	for (var i = 0; i < top_scores.length && i < 5; i++) {
-		$("#get-name-list > #"+i).html(top_scores[i].name + " : "+top_scores[i].display);
+		$("#get-name-list > tbody > #"+i).html('<td class="left-td">'+top_scores[i].name + '</td><td class="right-td">'+top_scores[i].display+"</td>");
 	};
 }
 
@@ -238,7 +238,7 @@ function getLocation() {
 
 //POST
 $(document).ready(function () {
-	$("#get-name-list").on('keyup','li > #get-name-input' ,function (e) {
+	$("#get-name-list").on('keyup','tbody > tr > td > #get-name-input' ,function (e) {
 	    if (e.keyCode === 13) {
 	    	var name = $("#get-name-input").val();
 	        $.ajax({
@@ -251,7 +251,7 @@ $(document).ready(function () {
 	        		donuts:donuts
 	        	}
 	        });
-	        $("#get-name-input").parent().html(name+": "+Math.floor(score));
+	        $("#get-name-input").parent().parent().html('<td class="left-td">'+name+'</td><td class="right-td">'+Math.floor(score)+'<td>');
 	    }
 	});
 });
