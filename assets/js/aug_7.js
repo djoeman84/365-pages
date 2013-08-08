@@ -35,14 +35,16 @@
  				break;
  			case 'wizard':
  				speed*=3;
- 				move_per_click*=4;
+ 				move_per_click_y*=4;
  				likelihood_new_tree *= 1.5;
  				likelihood_new_donut *= 3;
+ 				move_per_frame_x *= 2;
  				setTimeout(function () {
  					speed/=3;
- 					move_per_click/=4;
+ 					move_per_click_y/=4;
  					likelihood_new_tree /= 1.5;
  					likelihood_new_donut /= 3;
+ 					move_per_frame_x /=2;
  				}, wizard_spell_len);
  				break;
  		}
@@ -50,8 +52,8 @@
  }
 
  function Skier () {
- 	this.width = 50;
- 	this.height = 60;
+ 	this.width = 50*1.5;
+ 	this.height = 60*1.5;
  	this.x = window.innerWidth/2;
  	this.y = window.innerHeight/6;
  	this.direction = 1;
@@ -77,7 +79,8 @@
  		return (this.x > 0 && this.y > 0 && this.x + this.width < window.innerWidth && this.y + this.height < window.innerHeight);
  	}
  	this.update = function() {
- 		this.x += move_per_click * this.direction;
+ 		this.x += move_per_frame_x * this.direction;
+ 		if (!this.in_bounds()) this.x -= move_per_frame_x * this.direction;
  	}
  	this.draw = function() {
  		this.update();
@@ -97,11 +100,12 @@ var context;
 var game_interval = 0;
 var speed = 3;
 var speed_up = 0.0003;
-var move_per_click = 10;
+var move_per_click_y = 10;
+var move_per_frame_x = 5;
 var wizard_spell_len = 10000;
 var likelihood_new_tree = 0.03;
 var likelihood_new_donut = 0.01;
-var likelihood_new_wizard= 0.0005;
+var likelihood_new_wizard= 0.0007;
 var dir = {'left':37,'right':39,'up':38,'down':40};
 var obs_dict = {'tree':{'elem-id':'tree', 'height':60,'width':50},'donut':{'elem-id':'donut', 'height':60,'width':60},'wizard':{'elem-id':'wizard', 'height':60,'width':60}};
 var score = 0;
@@ -202,7 +206,7 @@ function flash_opacity(direction) {
 }
 
 function key_pressed(key) {
-	if (key == dir['left'] ){//&& player_skier.direction == 1) { //left
+	if (key == dir['left'] && player_skier.direction == 1) { //left
 		console.log('left');
 	   flash_opacity('left');
 	   player_skier.elem_id = "skier-left";
@@ -210,7 +214,7 @@ function key_pressed(key) {
 	} 
 	if (key == dir['up']) { //up
 	   flash_opacity('up');
-	   player_skier.y-=move_per_click;
+	   player_skier.y-=move_per_click_y;
 	}
 	if (key == dir['right'] && player_skier.direction == -1) { //right
 	   flash_opacity('right');
@@ -219,7 +223,7 @@ function key_pressed(key) {
 	}
 	if (key == dir['down']) { //down
 	   flash_opacity('down');
-	   player_skier.y+=move_per_click;
+	   player_skier.y+=move_per_click_y;
 	}
 }
 
