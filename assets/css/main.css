@@ -3,6 +3,10 @@
 	src: url('../font/Junction-webfont.ttf');
 }
 
+a {
+	color: #3A466C;
+}
+
 
 .left-jumbo {
 	position: fixed;
@@ -11,10 +15,28 @@
 	width: 150px;
 	margin-top: 70px;
 	margin-left: 5px;
+}
+
+.jumbo-top, .jumbo-bottom {
 	background-color: #3791A6;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
+}
+
+.jumbo-top {
+	-webkit-border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px;
+	margin-bottom: 0px;
+}
+
+.jumbo-middle {
+	border: solid 0.5em;
+	border-color: #85C4D3 transparent #B6DCE5;
+}
+
+.jumbo-bottom {
+	-webkit-border-radius: 0px 0px 10px 10px;
+	-moz-border-radius: 0px 0px 10px 10px;
+	border-radius: 0px 0px 10px 10px;
 }
 
 .jumbo-title {
@@ -28,7 +50,7 @@
 	margin-left: 5px;
 	margin-bottom: 5px;
 	color: #D0F6FF;
-}
+}	
 
 ul {
 	margin-left: 0px;
@@ -37,6 +59,10 @@ ul {
 }
 
 li {
+	list-style-type: none;
+}
+
+li.social-link-li {
 	display: inline;
 }
 
@@ -45,11 +71,35 @@ li {
 	filter: alpha(opacity=30);/* For IE8 and earlier */
 }
 
-.social-link-href:hover {
+.social-link-href:hover, .social-link-href:focus {
 	opacity: 1.0;
 	filter: alpha(opacity=100);
 }
 
+.social-links {
+	margin-bottom: 0px;
+}
+
+.dropdown-container {
+	background-color: #CEE7ED;
+	padding: 3px;
+}
+
+.dropdown-button {
+	color: #85C4D3;
+	display: block;
+	text-align: center;
+}
+
+#dropdown-button-text {
+	width: 0em;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.dropdown-month-elems:hover, .dropdown-month-elems:focus {
+	color: #A5B9BE;
+}
 
 /*
  *  Days Links
@@ -75,11 +125,12 @@ li {
 	margin-left: 1px;
 	margin-bottom: 1px;
 	text-align: center;
+	border-radius: 0.35em;
 	opacity:0.6;
 	filter:alpha(opacity=60); /* For IE8 and earlier */
 }
 
-.day-block:hover {
+.day-block:hover, .day-block:focus {
 	box-shadow: 0 0 8px #33D6FF;
 	z-index:10000;
 	opacity: 0.8;
@@ -135,5 +186,19 @@ a {
 	margin-bottom: 5px;
 }
 
+.up, .down {
+	display: block;
+}
 
+.down {
+	transform:rotate(-90deg);
+	-ms-transform:rotate(-90deg); /* IE 9 */
+	-webkit-transform:rotate(-90deg); /* Safari and Chrome */
+}
+
+.up {
+	transform:rotate(90deg);
+	-ms-transform:rotate(90deg); /* IE 9 */
+	-webkit-transform:rotate(90deg); /* Safari and Chrome */
+}
 

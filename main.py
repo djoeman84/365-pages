@@ -61,11 +61,16 @@ class MainHandler(Handler):
 	def get_info(self):
 		pages = db.GqlQuery("SELECT * FROM Page ORDER BY date ASC").fetch(limit=365)
 		days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(self.get_date(page).day) + " " + months[self.get_date(page).month],"day":days_of_week[self.get_date(page).weekday()]} for page in pages]
-		data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s"}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href) for page in pages])
-		return data, days
+		data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s","month":%d}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href,self.get_date(page).month) for page in pages])
+		month_anchors = ['' for x in range(13)] #13 since month 0 is nothing
+		for page in pages:
+			if not month_anchors[self.get_date(page).month]:
+				month_anchors[self.get_date(page).month] = str(page.key()).replace('-','_')
+		month_anchors = ','.join(['"%s"' %(a) for a in month_anchors])
+		return data, month_anchors, days
 	def render_page(self):
-		data, days = self.get_info()
-		self.render("index.html", days = days, data = data)
+		data, month_anchors, days = self.get_info()
+		self.render("index.html", days = days, data = data, month_anchors = month_anchors)
 	def get(self):
 		self.render_page()
 
