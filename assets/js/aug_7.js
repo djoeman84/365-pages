@@ -54,6 +54,7 @@
  	this.height = 60;
  	this.x = window.innerWidth/2;
  	this.y = window.innerHeight/6;
+ 	this.direction = 1;
  	this.elem_id = "skier-right";
  	//methods
  	this.collided = function(obstacle) {
@@ -75,7 +76,11 @@
  	this.in_bounds = function() {
  		return (this.x > 0 && this.y > 0 && this.x + this.width < window.innerWidth && this.y + this.height < window.innerHeight);
  	}
+ 	this.update = function() {
+ 		this.x += move_per_click * this.direction;
+ 	}
  	this.draw = function() {
+ 		this.update();
  		var img = document.getElementById(this.elem_id);
  		context.drawImage(img,this.x,this.y,this.width,this.height);
  	}
@@ -197,19 +202,19 @@ function flash_opacity(direction) {
 }
 
 function key_pressed(key) {
-	if (key == dir['left']) { //left
+	if (key == dir['left'] && player_skier.direction === 1) { //left
 	   flash_opacity('left');
 	   player_skier.elem_id = "skier-left";
-	   player_skier.x-=move_per_click;
+	   player_skier.direction = -1;
 	} 
 	if (key == dir['up']) { //up
 	   flash_opacity('up');
 	   player_skier.y-=move_per_click;
 	}
-	if (key == dir['right']) { //right
+	if (key == dir['right'] && player_skier.direction === -1) { //right
 	   flash_opacity('right');
 	   player_skier.elem_id = "skier-right";
-	   player_skier.x+=move_per_click;
+	   player_skier.direction = 1;
 	}
 	if (key == dir['down']) { //down
 	   flash_opacity('down');
@@ -230,18 +235,18 @@ function getLocation() {
 $(document).ready(function () {
 	$("#get-name-list").on('keyup','li > #get-name-input' ,function (e) {
 	    if (e.keyCode === 13) {
-	        console.log($("#get-name-input").val());
+	    	var name = $("#get-name-input").val();
 	        $.ajax({
 	        	url:'7-AUG',
 	        	type:'POST',
 	        	data: {
-	        		name:$("#get-name-input").val(),
+	        		name:name,
 	        		loc:gps_position,
 	        		score:score,
 	        		donuts:donuts
 	        	}
 	        });
-
+	        $("#get-name-input").parent().html(name+": "+Math.floor(score));
 	    }
 	});
 });
