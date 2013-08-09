@@ -16,7 +16,7 @@
  	this.draw = function () {
  		this.update();
  		var img = document.getElementById(obs_dict[type]['elem-id']);
- 		context.drawImage(img,this.x,this.y,this.width,this.height);
+ 		context.drawImage(img,this.x,this.y);
  	}
  	this.is_active = function() {
  		return (this.y + this.height > 0); //true if is below top of screen
@@ -52,8 +52,8 @@
  }
 
  function Skier () {
- 	this.width = 50*1.5;
- 	this.height = 60*1.5;
+ 	this.width = 80;
+ 	this.height = 99;
  	this.x = window.innerWidth/2;
  	this.y = window.innerHeight/6;
  	this.direction = 1;
@@ -85,7 +85,7 @@
  	this.draw = function() {
  		this.update();
  		var img = document.getElementById(this.elem_id);
- 		context.drawImage(img,this.x,this.y,this.width,this.height);
+ 		context.drawImage(img,this.x,this.y);
  	}
  }
 
@@ -98,8 +98,8 @@ var player_skier;
 var canvas;
 var context;
 var game_interval = 0;
-var speed = 3;
-var speed_up = 0.0003;
+var speed = 4;
+var speed_up = 0.002;
 var move_per_click_y = 10;
 var move_per_frame_x = 5;
 var wizard_spell_len = 10000;
@@ -107,11 +107,11 @@ var likelihood_new_tree = 0.03;
 var likelihood_new_donut = 0.01;
 var likelihood_new_wizard= 0.0007;
 var dir = {'left':37,'right':39,'up':38,'down':40};
-var obs_dict = {'tree':{'elem-id':'tree', 'height':60,'width':50},'donut':{'elem-id':'donut', 'height':60,'width':60},'wizard':{'elem-id':'wizard', 'height':60,'width':60}};
+var obs_dict = {'tree':{'elem-id':'tree', 'height':59,'width':50},'donut':{'elem-id':'donut', 'height':44,'width':50},'wizard':{'elem-id':'wizard', 'height':73,'width':60}};
 var score = 0;
 var donuts = 0;
 var gps_position;
-var collision_fudge = 5;//number of pixels to fudge collision by
+var collision_fudge = 3;//number of pixels to fudge collision by
 
 function prepare_top_scores () {
 	var input_name_html = '<input type="text" id="get-name-input">';
@@ -142,7 +142,7 @@ function bounce (object, wall) {
 
 function update_vals () {
 	speed += speed_up;
-	$('#score').html(Math.floor(score) + ' magical donut score  '+ donuts + ' donuts');
+	$('#score').html(Math.floor(score) + ' magical donut points  '+ donuts + ' donuts');
 }
 
 function update_canvas () {
@@ -259,7 +259,7 @@ $(document).ready(function () {
 
 $(window).resize(function (argument) {
 	resize_canvas();
-})
+});
 
 $(document).keydown(function(e){
 	key_pressed(e.keyCode);

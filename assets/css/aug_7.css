@@ -75,8 +75,8 @@ img {
 #get-name-list {
 	margin-top: 10px;
 	margin-bottom: 20px;
-	opacity: 0.40;
-	filter:alpha(opacity=040); /* For IE8 and earlier */
+	opacity: 0.70;
+	filter:alpha(opacity=070); /* For IE8 and earlier */
 }
 
 .left-td, .right-td {
