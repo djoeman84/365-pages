@@ -7,9 +7,6 @@ $(document).ready(function () {
 	//day blocks
 	$(".day-block").hover(hover_focus);
 	$(".day-block").focus(hover_focus);
-	$(".day-block").on("click",function () {
-		window.location.href = data[this.id].href;
-	});
 	$("#dropdown-button").on("mouseenter",dropdown_menu);
 	$(".dropdown").on("mouseleave", pullup_menu);
 	$('.hidden').css('height',function(i,h){

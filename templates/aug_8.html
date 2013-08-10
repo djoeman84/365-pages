@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cookies</title>
+	<link rel="stylesheet" type="text/css" href="/css/aug_8.css">
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<!--<script src="/js/jquery.js" type="text/javascript"></script>-->
+	<script src="/js/aug_8.js" type="text/javascript"></script>
+	<script type="text/javascript">var visits = {{visits}};</script>
+</head>
+<body>
+	<ul id="cookies">
+		{% for i in range(visits) %}
+		<li><img src="" class="cookie-img"></li>
+		{% endfor %}
+	</ul>
+	<audio id="soundHandle" style="display: none;"></audio>
+</body>
+</html>

@@ -24,14 +24,15 @@
  	this.collide = function () {
  		switch (this.type){
  			case 'tree':
+ 				play_sound_effect('/audio/tree_crash.mp3');
  				prepare_top_scores();
  				$('.center-popup').css('display', 'block');
  				clearInterval(game_interval);
  				break;
  			case 'donut':
+ 				play_sound_effect('/audio/donut.mp3');
  				score += speed*5;
  				donuts++;
- 				console.log(score);
  				break;
  			case 'wizard':
  				speed*=3;
@@ -97,9 +98,11 @@ var obstacles = [];
 var player_skier;
 var canvas;
 var context;
+var audio_loops = [];
 var game_interval = 0;
-var speed = 4;
+var speed = 4.5;
 var speed_up = 0.002;
+var obs_increase = 1.0004;
 var move_per_click_y = 10;
 var move_per_frame_x = 5;
 var wizard_spell_len = 10000;
@@ -112,6 +115,22 @@ var score = 0;
 var donuts = 0;
 var gps_position;
 var collision_fudge = 3;//number of pixels to fudge collision by
+
+
+function set_default_vars () {
+	speed = 4.5;
+	speed_up = 0.002;
+	obs_increase = 1.0004;
+	move_per_click_y = 10;
+	move_per_frame_x = 5;
+	wizard_spell_len = 10000;
+	likelihood_new_tree = 0.03;
+	likelihood_new_donut = 0.01;
+	likelihood_new_wizard= 0.0007;
+	score = 0;
+	donuts = 0;
+	collision_fudge = 3;
+}
 
 function prepare_top_scores () {
 	var input_name_html = '<input type="text" id="get-name-input">';
@@ -153,13 +172,13 @@ function update_canvas () {
 	player_skier.draw();
 
 	//draw obstacles
-	execute_with_likelihood(likelihood_new_tree, function(arg) {
+	execute_with_likelihood(likelihood_new_tree *= obs_increase, function(arg) {
 		obstacles.push(new Obstacle(arg));
 	}, 'tree');
-	execute_with_likelihood(likelihood_new_donut, function(arg) {
+	execute_with_likelihood(likelihood_new_donut *= obs_increase, function(arg) {
 		obstacles.push(new Obstacle(arg));
 	}, 'donut');
-	execute_with_likelihood(likelihood_new_wizard, function(arg) {
+	execute_with_likelihood(likelihood_new_wizard *= obs_increase, function(arg) {
 		obstacles.push(new Obstacle(arg));
 	}, 'wizard');
 	var dead = [];
@@ -183,7 +202,7 @@ function update_canvas () {
 function reset_canvas () {
 	clearInterval(game_interval);
 	$('.center-popup').removeAttr('style');
-	score = 0;
+	set_default_vars();
 	obstacles = [];
 	init_canvas();
 }
@@ -205,12 +224,71 @@ function flash_opacity(direction) {
 	$('.arrow-keys-li.'+direction).animate({opacity:'0.30'}, 300);
 }
 
+var audio_handles = {};
+function play_sound_effect (source, loop) {
+	if (!(source in audio_handles)) { //one audio handle for each new sound- new sounds stored even if sound is off
+		audio_handles[source] = {'handle':document.createElement('audio')};
+		audio_handles[source].handle.src = source;
+		if (loop) {
+			audio_handles[source].handle.setAttribute('loop','true');
+			audio_loops.push(audio_handles[source].handle);
+		}
+	}
+	if (sound_on()) {
+		audio_handles[source].handle.pause();
+		audio_handles[source].handle.play();
+	}
+}
+
+function sound_on () {
+	var sound_on = getCookie('sound_on');
+	if (sound_on != null && (sound_on == 'on' || sound_on == 'off')) {
+		return sound_on == 'on';
+	} else {
+		console.log('no/malformed cookie');
+		set_sound(true)
+		return true;
+	}
+}
+
+function set_sound (set_to_on) {
+	if (set_to_on) {
+		setCookie('sound_on','on',10);
+	} else {
+		setCookie('sound_on','off',10);
+	}
+}
+function set_volume_botton_attrs () {
+	console.log('load');
+	if (sound_on()) {
+		$("#sound-toggle").css('opacity','1.0');
+		$("#sound-toggle").css('filter','alpha(opacity=100)');/* For IE8 and earlier */
+	} else {
+		$("#sound-toggle").css('opacity','0.2');
+		$("#sound-toggle").css('filter','alpha(opacity=20)');/* For IE8 and earlier */
+	}
+}
+
+function toggle_sound () {
+	if (sound_on()) {
+		for (var i = audio_loops.length - 1; i >= 0; i--) {
+			audio_loops[i]['elem'].pause();
+		};
+	} else {
+		for (var i = audio_loops.length - 1; i >= 0; i--) {
+			audio_loops[i]['elem'].play()
+		};
+	}
+	set_sound(!sound_on());
+	set_volume_botton_attrs();
+}
+
 function key_pressed(key) {
 	if (key == dir['left'] && player_skier.direction == 1) { //left
-		console.log('left');
 	   flash_opacity('left');
 	   player_skier.elem_id = "skier-left";
 	   player_skier.direction = -1;
+	   play_sound_effect('./audio/snow.mp3');
 	} 
 	if (key == dir['up']) { //up
 	   flash_opacity('up');
@@ -220,6 +298,7 @@ function key_pressed(key) {
 	   flash_opacity('right');
 	   player_skier.elem_id = "skier-right";
 	   player_skier.direction = 1;
+	   play_sound_effect('/audio/snow.mp3');
 	}
 	if (key == dir['down']) { //down
 	   flash_opacity('down');
@@ -238,6 +317,7 @@ function getLocation() {
 
 //POST
 $(document).ready(function () {
+	play_sound_effect('/audio/AcesHigh.mp3', true);
 	$("#get-name-list").on('keyup','tbody > tr > td > #get-name-input' ,function (e) {
 	    if (e.keyCode === 13) {
 	    	var name = $("#get-name-input").val();

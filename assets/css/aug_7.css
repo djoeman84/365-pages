@@ -24,6 +24,16 @@ img {
 	display: none;
 }
 
+#sound-toggle > img {
+	display: block;
+}
+
+#sound-toggle {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+}
+
 .popup-container {
 	position: fixed;
 	width: 100%;

@@ -3,11 +3,42 @@
 	src: url('../font/Junction-webfont.ttf');
 }
 
+
+/*
+ *  General
+ *
+ */
 a {
 	color: #3A466C;
 }
 
+body {
+	font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-weight: 300;
+	background-image: url('../img/cream_pixels.png');
+	margin-left: 0px;
+}
 
+a {
+	text-decoration: none;
+}
+
+ul {
+	margin-left: 0px;
+	-webkit-padding-start: 16px;
+	opacity: 1;
+}
+
+li {
+	list-style-type: none;
+}
+
+
+/*
+ *  Class
+ *
+ */
+ /* jumbo */
 .left-jumbo {
 	position: fixed;
 	opacity: 0.6;
@@ -52,16 +83,8 @@ a {
 	color: #D0F6FF;
 }	
 
-ul {
-	margin-left: 0px;
-	-webkit-padding-start: 16px;
-	opacity: 1;
-}
 
-li {
-	list-style-type: none;
-}
-
+ /* social links */
 li.social-link-li {
 	display: inline;
 }
@@ -80,6 +103,37 @@ li.social-link-li {
 	margin-bottom: 0px;
 }
 
+
+.social-sprite {
+	display:inline-block;
+	overflow:hidden;
+	background-repeat: no-repeat;
+	background-image:url("../img/social-sprite.png");
+	height: 20px;
+	width: 20px;
+}
+
+.social-sprite.facebook {
+	background-position: -3px -83px	
+}
+
+.social-sprite.github {
+	background-position: -3px -63px
+}
+
+.social-sprite.linkedin {
+	background-position: -3px -43px
+}
+
+.social-sprite.quora {
+	background-position: -3px -23px
+}
+
+.social-sprite.twitter {
+	background-position: -3px -3px	
+}
+
+/* dropdown */
 .dropdown-container {
 	background-color: #CEE7ED;
 	padding: 3px;
@@ -101,10 +155,9 @@ li.social-link-li {
 	color: #A5B9BE;
 }
 
-/*
- *  Days Links
- */
 
+
+ /* days links */
  #wrapper{
  	text-align:center;
  	padding:0 160px;
@@ -146,18 +199,6 @@ li.social-link-li {
 	font-size: 30px;
 	margin-top: 5px;
 	opacity: 0.5;
-}
-
-body {
-	font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-	font-weight: 300;
-	background-image: url('../img/cream_pixels.png');
-	margin-left: 0px;
-}
-
-
-a {
-	text-decoration: none;
 }
 
 #info-panel {
