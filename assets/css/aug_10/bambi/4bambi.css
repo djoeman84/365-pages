@@ -1,0 +1,32 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:e214ee0535eae9b3319d91645b907eb7:5/6$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite4 {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(4bambi.png);}
+
+.bambi_90 {width:568px; height:320px; background-position: -2px -2px}
+.bambi_89 {width:568px; height:320px; background-position: -572px -2px}
+.bambi_88 {width:568px; height:320px; background-position: -1142px -2px}
+.bambi_87 {width:568px; height:320px; background-position: -2px -324px}
+.bambi_86 {width:568px; height:320px; background-position: -572px -324px}
+.bambi_85 {width:568px; height:320px; background-position: -1142px -324px}
+.bambi_84 {width:568px; height:320px; background-position: -2px -646px}
+.bambi_83 {width:568px; height:320px; background-position: -2px -968px}
+.bambi_82 {width:568px; height:320px; background-position: -2px -1290px}
+.bambi_81 {width:568px; height:320px; background-position: -2px -1612px}
+.bambi_80 {width:568px; height:320px; background-position: -572px -646px}
+.bambi_79 {width:568px; height:320px; background-position: -1142px -646px}
+.bambi_78 {width:568px; height:320px; background-position: -572px -968px}
+.bambi_77 {width:568px; height:320px; background-position: -1142px -968px}
+.bambi_76 {width:568px; height:320px; background-position: -572px -1290px}
+.bambi_75 {width:568px; height:320px; background-position: -572px -1612px}
+.bambi_74 {width:568px; height:320px; background-position: -1142px -1290px}
+.bambi_73 {width:568px; height:320px; background-position: -1142px -1612px}

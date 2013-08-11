@@ -9,6 +9,7 @@ import jinja2
 import os
 from google.appengine.ext import db
 import datetime
+import time
 import json
 import hashlib
 
@@ -72,7 +73,7 @@ def get_date(page):
 
 def get_info(refresh=False):
 	key = 'main_daily_posts'
-	if not refresh and key in CACHE:
+	if (not refresh) and key in CACHE:
 		return CACHE[key]['data'], CACHE[key]['month_anchors'], CACHE[key]['days']
 	else:
 		print '::GqlQuery'
@@ -92,6 +93,7 @@ class MainHandler(Handler):
 		data, month_anchors, days = get_info()
 		self.render("index.html", days = days, data = data, month_anchors = month_anchors)
 	def get(self):
+		#get_info(True)
 		self.render_page()
 
 class PostHandler(Handler):
@@ -112,11 +114,15 @@ class PostHandler(Handler):
 		if title and href and desc and tzone:
 			p = Page(title=title, href=href, desc=desc, tzone=5)
 			p.put()
+			while (p.get(p.key()) == None):
+				time.sleep(0.01);
+				print 'wait'
+			get_info(True)
 			self.redirect("../")
 		else:
 			error = "please fill all fields"
 			self.render("post.html", error=error)
-		get_info(True)
+		
 
 
 class Aug4Handler(Handler):
@@ -150,11 +156,16 @@ class Aug7Handler(Handler):
 		loc   = self.request.get("loc")
 		score = int(float(self.request.get("score")))
 		donuts= int(self.request.get("donuts"))
+		ts = None
 		if name and score and donuts:
 			if loc:
-				TopScore(name=name,score=score,donuts=donuts,loc=loc).put()
+				ts = TopScore(name=name,score=score,donuts=donuts,loc=loc)
 			else:
-				TopScore(name=name,score=score,donuts=donuts).put()
+				ts = TopScore(name=name,score=score,donuts=donuts)
+		while (ts.get(p.key()) == None):
+			time.sleep(0.01);
+			print 'wait'
+		ts.put()
 		print "post: name-"+name+"\nloc-"+loc+"\nscore-"+str(score)+"\ndonuts-"+str(donuts)
 		get_js_top_score_data(True)
 
@@ -172,15 +183,24 @@ class Aug8Handler(Handler):
 		self.response.headers.add_header('Set-Cookie', 'visits='+new_cookie)
 		self.render("aug_8.html", visits=visits)
 
+class Aug9Handler(Handler):
+	def get(self):
+		self.render('aug_9.html');
+
+class Aug10Handler(Handler):
+	def get(self):
+		self.render('aug_10.html');
 
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
-	('/4-AUG', Aug4Handler),
-	('/5-AUG', Aug5Handler),
-	('/6-AUG', Aug6Handler),
-	('/7-AUG', Aug7Handler),
-	('/8-AUG', Aug8Handler)
+	('/4-AUG',  Aug4Handler),
+	('/5-AUG',  Aug5Handler),
+	('/6-AUG',  Aug6Handler),
+	('/7-AUG',  Aug7Handler),
+	('/8-AUG',  Aug8Handler),
+	('/9-AUG',  Aug9Handler),
+	('/10-AUG', Aug10Handler)
 ], debug=True)
 
 

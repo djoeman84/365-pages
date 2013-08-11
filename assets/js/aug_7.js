@@ -245,7 +245,6 @@ function sound_on () {
 	if (sound_on != null && (sound_on == 'on' || sound_on == 'off')) {
 		return sound_on == 'on';
 	} else {
-		console.log('no/malformed cookie');
 		set_sound(true)
 		return true;
 	}
@@ -259,7 +258,6 @@ function set_sound (set_to_on) {
 	}
 }
 function set_volume_botton_attrs () {
-	console.log('load');
 	if (sound_on()) {
 		$("#sound-toggle").css('opacity','1.0');
 		$("#sound-toggle").css('filter','alpha(opacity=100)');/* For IE8 and earlier */
@@ -272,11 +270,11 @@ function set_volume_botton_attrs () {
 function toggle_sound () {
 	if (sound_on()) {
 		for (var i = audio_loops.length - 1; i >= 0; i--) {
-			audio_loops[i]['elem'].pause();
+			audio_loops[i].pause();
 		};
 	} else {
 		for (var i = audio_loops.length - 1; i >= 0; i--) {
-			audio_loops[i]['elem'].play()
+			audio_loops[i].play()
 		};
 	}
 	set_sound(!sound_on());
