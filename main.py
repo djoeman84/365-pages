@@ -185,11 +185,23 @@ class Aug8Handler(Handler):
 
 class Aug9Handler(Handler):
 	def get(self):
-		self.render('aug_9.html');
+		self.render('aug_9.html')
 
 class Aug10Handler(Handler):
 	def get(self):
-		self.render('aug_10.html');
+		self.render('aug_10.html')
+
+class Aug11Handler(Handler):
+	def get(self):
+		self.render('aug_11.html')
+
+class Aug12Handler(Handler):
+	def get(self):
+		self.render('aug_12.html')
+
+class Aug13Handler(Handler):
+	def get(self):
+		self.render('aug_13.html')
 
 
 app = webapp2.WSGIApplication([
@@ -200,7 +212,11 @@ app = webapp2.WSGIApplication([
 	('/7-AUG',  Aug7Handler),
 	('/8-AUG',  Aug8Handler),
 	('/9-AUG',  Aug9Handler),
-	('/10-AUG', Aug10Handler)
+	('/10-AUG', Aug10Handler),
+	('/11-AUG', Aug11Handler),
+	('/12-AUG', Aug12Handler),
+	('/13-AUG', Aug13Handler),
+	('/.*',  MainHandler)
 ], debug=True)
 
 

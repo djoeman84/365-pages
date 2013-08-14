@@ -40,13 +40,16 @@
  				likelihood_new_tree *= 1.5;
  				likelihood_new_donut *= 3;
  				move_per_frame_x *= 2;
- 				setTimeout(function () {
+ 				wizard_timeouts.push(setTimeout(function () {
  					speed/=3;
  					move_per_click_y/=4;
  					likelihood_new_tree /= 1.5;
  					likelihood_new_donut /= 3;
  					move_per_frame_x /=2;
- 				}, wizard_spell_len);
+ 					if(wizard_timeouts[0]) {
+ 						wizard_timeouts.splice(0,1);
+ 					}
+ 				}, wizard_spell_len));
  				break;
  		}
  	}
@@ -99,6 +102,7 @@ var player_skier;
 var canvas;
 var context;
 var audio_loops = [];
+var wizard_timeouts = [];
 var game_interval = 0;
 var speed = 4.5;
 var speed_up = 0.002;
@@ -130,6 +134,10 @@ function set_default_vars () {
 	score = 0;
 	donuts = 0;
 	collision_fudge = 3;
+	for (var i = wizard_timeouts.length - 1; i >= 0; i--) {
+		clearTimeout(wizard_timeouts[i]);
+		wizard_timeouts.splice(i,1);
+	};
 }
 
 function prepare_top_scores () {

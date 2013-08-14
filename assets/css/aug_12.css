@@ -1,0 +1,87 @@
+body {
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: SkyBlue;
+}
+
+#body-padding {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+nav {
+	display: block;
+	width: 100%;
+	background: #efefef; 
+	position: fixed;
+	top: 0;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+nav ul ul {
+	display: none;
+}
+
+	nav ul li:hover > ul {
+		display: block;
+	}
+
+
+nav ul {
+	list-style: none;
+	position: relative;
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+}
+	nav ul:after {
+		content: ""; clear: both; display: block;
+	}
+
+	nav ul li {
+		float: left;
+	}
+		nav ul li:hover {
+			background: #4b545f;
+			border-radius: 10px;
+		}
+			nav ul li:hover a {
+				color: #fff;
+			}
+		
+		nav ul li a {
+			display: block; padding: 25px 40px;
+			color: #757575; text-decoration: none;
+		}
+			
+		
+	nav ul ul {
+		background: #5f6975; border-radius: 10px; padding: 0;
+		position: absolute; top: 100%;
+	}
+		nav ul ul li {
+			float: none; 
+			position: relative;
+		}
+		nav ul ul li:not(:first-child) {
+			border-top: 1px solid #6b727c;
+		}
+		nav ul ul li:not(:last-child) {
+			border-bottom: 1px solid #575f6a; 
+		}
+			nav ul ul li a {
+				padding: 15px 40px;
+				color: #fff;
+			}	
+				nav ul ul li a:hover {
+					border-radius: 10px;
+					background: #4b545f;
+				}
+		
+	nav ul ul ul {
+		position: absolute; left: 100%; top:0;
+	}

@@ -1,0 +1,28 @@
+body {
+	margin: 0px;
+}
+
+	ul {
+		list-style-type: none;
+		margin: 0px;
+		padding: 0px;
+	}
+
+	.canvas-li {
+		width: 100%;
+		height: 200px;
+		display: inline-block;
+	}
+
+		.angler {
+			background-color: LightGray;
+		}
+
+		.canvas-li > input {
+			position: absolute;
+			background-color: transparent;
+			border: 0px solid;
+			font-size: 14px;
+			left: 10px;
+			top: 5px;
+		}
