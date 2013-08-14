@@ -19,10 +19,14 @@ body {
 		}
 
 		.canvas-li > input {
-			position: absolute;
+			position: relative;
 			background-color: transparent;
 			border: 0px solid;
 			font-size: 14px;
 			left: 10px;
-			top: 5px;
+			top: 25px;
 		}
+
+p {
+	margin-left: 20px;
+}

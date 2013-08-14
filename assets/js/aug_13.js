@@ -2,24 +2,29 @@ var angle = 0;
 
 var anglers = [];
 var num_ang_to_ang = {};
-var colors = ['red','blue','green'];
+var colors = ['red','blue','green','orange','yellow'];
+
+var timer;
 
 /*
  *  Init
  *
  */
 function init_js () {
-	add_canvas();
+	for (var i = 1; i < 7; i++) {
+		add_canvas(i);
+	};
 	init_timer();
 }
+
 
 
 /*
  *  Classes
  *
  */
- function Angler (canvas) {
- 	this.num_sides = 1;
+ function Angler (canvas, num_sides) {
+ 	this.num_sides = num_sides;
  	this.canvas  = canvas;
  	this.context = canvas.getContext('2d');
 
@@ -54,69 +59,53 @@ function init_js () {
 
  				//find point
  				var x = this.center_x;
- 				var y = this.center_y - this.radius + Math.abs(((angle - Math.PI)*(this.radius*2))/(Math.PI));
+ 				if (angle < Math.PI * 0.5) {
+ 					var y = this.center_y + (2*angle * this.radius)/Math.PI;
+ 				} else if(angle >= Math.PI * 0.5 && angle < Math.PI * 1.5) {
+ 					var y = this.center_y + this.radius - ((angle - 0.5 * Math.PI)*2 * this.radius)/Math.PI;
+ 				} else {
+ 					var y = this.center_y - this.radius + ((angle - 1.5*Math.PI)*2 * this.radius)/Math.PI;
+ 				}
+ 			
  				break;
- 			case 3:
- 				var top  = (1.5)*(Math.PI);
- 				var step = (2/3)*(Math.PI);
- 				//draw shape
- 				this.context.beginPath();
- 				this.context.moveTo(this.center_x + this.radius * Math.cos(top), this.center_y + this.radius * Math.sin(top));
- 				this.context.lineTo(this.center_x + this.radius * Math.cos(top + step), this.center_y + this.radius * Math.sin(top + step));
- 				this.context.lineTo(this.center_x + this.radius * Math.cos(top + 2*step), this.center_y + this.radius * Math.sin(top + 2*step));
- 				this.context.lineTo(this.center_x + this.radius * Math.cos(top), this.center_y + this.radius * Math.sin(top));
- 				this.context.strokeStyle = 'gray';
- 				this.context.stroke();
+ 			default:
+	 			var top  = 0;
+	 			var step = (2/this.num_sides)*(Math.PI);
 
- 				//define lines
- 				var x1 = this.center_x + this.radius * Math.cos(top),          y1 = this.center_y + this.radius * Math.sin(top);
- 				var x2 = this.center_x + this.radius * Math.cos(top + step),   y2 = this.center_y + this.radius * Math.sin(top + step);
- 				var x3 = this.center_x + this.radius * Math.cos(top + 2*step), y3 = this.center_y + this.radius * Math.sin(top + 2*step);
- 				var x_angle1 = this.center_x + this.radius * Math.cos(angle),  y_angle1 = this.center_y + this.radius * Math.sin(angle);
- 				var x_angle2 = this.center_x,                                  y_angle2 = this.center_y;
+	 			//draw shape
+	 			this.context.beginPath();
+	 			this.context.moveTo(this.center_x + this.radius * Math.cos(top - step), this.center_y + this.radius * Math.sin(top - step));
+	 			for (var i = 0; i < this.num_sides; i++) {
+	 				this.context.lineTo(this.center_x + this.radius * Math.cos(top + i*step), this.center_y + this.radius * Math.sin(top + i*step));
+	 			};
+	 			this.context.strokeStyle = 'gray';
+	 			this.context.stroke();
 
- 				var A1 = y2 - y1;
- 				var B1 = x1 - x2;
- 				var C1 = A1*x1 + B1*y1;
+	 			//define lines
+	 			var x_angle1 = this.center_x + this.radius * Math.cos(angle),  y_angle1 = this.center_y + this.radius * Math.sin(angle);
+	 			var x_angle2 = this.center_x,                                  y_angle2 = this.center_y;
 
- 				var A2 = y3 - y2;
- 				var B2 = x2 - x3;
- 				var C2 = A2*x2 + B2*y2;
-
- 				var A3 = y1 - y3;
- 				var B3 = x3 - x1;
- 				var C3 = A3*x3 + B3*y3;
-
- 				var Aa = y_angle2 - y_angle1;
+	 			var Aa = y_angle2 - y_angle1;
  				var Ba = x_angle1 - x_angle2;
  				var Ca = Aa*x_angle1 + Ba*y_angle1;
 
+	 			for (var i = 0; i < this.num_sides; i++) {
+	 				if (angle > top + i*step && angle < top + (i+1)*step) {
+	 					var x1 = this.center_x + this.radius * Math.cos(top + i*step),     y1 = this.center_y + this.radius * Math.sin(top + i*step);
+	 					var x2 = this.center_x + this.radius * Math.cos(top + (i+1)*step), y2 = this.center_y + this.radius * Math.sin(top + (i+1)*step);
 
- 				//find point
- 				var det1 = A1*Ba - Aa*B1;
- 				var x1_sol = (Ba*C1 - B1*Ca)/det1;
- 				var y1_sol = (A1*Ca - Aa*C1)/det1;
+	 					var A1 = y2 - y1;
+	 					var B1 = x1 - x2;
+	 					var C1 = A1*x1 + B1*y1;
 
- 				var det2 = A2*Ba - Aa*B2;
- 				var x2_sol = (Ba*C2 - B2*Ca)/det2;
- 				var y2_sol = (A2*Ca - Aa*C2)/det2;
+	 					var det1 = A1*Ba - Aa*B1;
 
- 				var det3 = A3*Ba - Aa*B3;
- 				var x3_sol = (Ba*C3 - B3*Ca)/det3;
- 				var y3_sol = (A3*Ca - Aa*C3)/det3;
+	 					var x = (Ba*C1 - B1*Ca)/det1;
+	 					var y = (A1*Ca - Aa*C1)/det1;
+	 				}
+	 			};
 
- 				if (angle < top && angle > top - step) {
- 					var x = x3_sol, y = y3_sol;
- 				}else if (angle < top - step && angle > top - 2* step){
- 					var x = x2_sol, y = y2_sol;
- 				} else {
- 					var x = x1_sol, y = y1_sol;
- 				}
- 				break;
-
- 			case 4:
-
- 				break;
+	 			break; 
  		}
 
  		
@@ -137,7 +126,7 @@ function init_js () {
  		//draw height
  		this.context.beginPath();
  		this.context.moveTo(0,y);
- 		this.context.lineTo(this.canvas.width,y);
+ 		this.context.lineTo(this.radius * 3,y);
  		this.context.strokeStyle = 'gray';
  		this.context.stroke();
 
@@ -180,7 +169,11 @@ function Point (x, y, context, i) {
 	}
 }
 
-function add_canvas () {
+function add_canvas (num_sides) {
+	//use time as id
+	var d = new Date();
+	var dtime = d.getTime();
+
 	var cnv_li  = document.createElement('li');
 	var num_ang = document.createElement('input');
 	var canvas  = document.createElement('canvas');
@@ -188,9 +181,9 @@ function add_canvas () {
 
 	num_ang.type = 'number';
 	num_ang.min = 1;
-	num_ang.max = 3;
-	num_ang.defaultValue = 1;
+	num_ang.defaultValue = num_sides;
 	num_ang.onchange = val_updated;
+	num_ang.id = dtime;
 
 	cnv_li.appendChild(num_ang);
 	cnv_li.appendChild(canvas);
@@ -200,14 +193,14 @@ function add_canvas () {
 	canvas.height = $(".canvas-li").height();
 	canvas.width  = $(".canvas-li").width();
 
-	var newAngler = new Angler(canvas);
+	var newAngler = new Angler(canvas, num_sides);
 
 	anglers.push(newAngler);
-	num_ang_to_ang[num_ang] = newAngler;
+	num_ang_to_ang[dtime] = newAngler;
 }
 
 function init_timer() {
-	setInterval(function () {
+	timer = setInterval(function () {
 		angle += (Math.PI * 2)/60;
 		angle %= Math.PI * 2;
 
@@ -220,5 +213,5 @@ function init_timer() {
 
 
 function val_updated () {
-	num_ang_to_ang[this].num_sides = parseInt(this.value);
+	num_ang_to_ang[this.id].num_sides = parseInt(this.value);
 }
