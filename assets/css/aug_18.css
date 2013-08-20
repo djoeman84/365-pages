@@ -1,0 +1,53 @@
+@font-face {
+	font-family: digi;
+	src: url('../font/DS-DIGI.TTF');
+}
+
+/* general */
+ul {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+li {
+	display: inline-block;
+	list-style-type: none;
+}
+
+
+body {
+	font-family: digi;
+	font-size: 60px;
+}
+
+	#ticker-container {
+		display: block;
+		list-style-type: none;
+	}
+
+	.ticker-li {
+		background-color: gray;
+	}
+
+		.ticker {
+			width: 0.7em;
+			text-align: center;
+			background-color: LightGray;
+			display: inline-block;
+			transition:0.2s;
+			-webkit-transition:0.2s;
+		}
+
+			.left {
+				border-radius: 0.25em 0em 0em 0.25em;
+			}
+
+			.right {
+				border-radius: 0em 0.25em 0.25em 0em;
+			}
+
+			.flip {
+				transform: rotateX(180deg);
+				-webkit-transform: rotateX(180deg);
+			}

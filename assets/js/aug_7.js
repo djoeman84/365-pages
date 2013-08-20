@@ -141,18 +141,22 @@ function set_default_vars () {
 }
 
 function prepare_top_scores () {
-	var input_name_html = '<input type="text" id="get-name-input">';
-	top_scores = [{'name':'enter your name!','display':input_name_html,'score':score}];
-	for (var i = 0; i < top_scores_from_db.length; i++) {
-		top_scores.push({'name':top_scores_from_db[i].name,'display':top_scores_from_db[i].score,'score':top_scores_from_db[i].score})
-	};
-	top_scores.sort(function (a,b) {
-		return b.score - a.score;
-	});
-	for (var i = 0; i < top_scores.length && i < 5; i++) {
-		$("#get-name-list > tbody > #"+i).html('<td class="left-td">'+top_scores[i].name + '</td><td class="right-td">'+top_scores[i].display+"</td>");
-	};
+	$.getJSON('http://365-pages.appspot.com/json?api=ski&num=5', function (json) {
+		var json_scores = json.request.scores;
+		var input_name_html = '<input type="text" id="get-name-input">';
+		top_scores = [{'name':'enter your name!','display':input_name_html,'score':score}];
+		for (var i = 0; i < json_scores.length; i++) {
+			top_scores.push({'name':json_scores[i].name,'display':json_scores[i].score,'score':json_scores[i].score})
+		};
+		top_scores.sort(function (a,b) {
+			return b.score - a.score;
+		});
+		for (var i = 0; i < top_scores.length && i < 5; i++) {
+			$("#get-name-list > tbody > #"+i).html('<td class="left-td">'+top_scores[i].name + '</td><td class="right-td">'+top_scores[i].display+"</td>");
+		};
+	})
 }
+
 
 function execute_with_likelihood (likelihood, fn, arg) {
 	if (Math.random() < likelihood) fn(arg);

@@ -11,7 +11,9 @@ from google.appengine.ext import db
 import datetime
 import time
 import json
+import urllib2
 import hashlib
+import math
 
 months = ["NONE","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 days_of_week = ["MON","TUE","WED","THR","FRI","SAT","SUN"]
@@ -40,7 +42,7 @@ class Page(db.Model):
 	href = db.LinkProperty(required = True)
 	date = db.DateTimeProperty(auto_now_add = True)
 	desc = db.TextProperty(required = True)
-	tzone= db.IntegerProperty()
+	tzone= db.IntegerProperty(required = True)
 
 class TopScore(db.Model):
 	name   = db.StringProperty(required = True)
@@ -63,12 +65,7 @@ class Handler(webapp2.RequestHandler):
 CACHE = {}
 def get_date(page):
 	date = page.date
-	date += datetime.timedelta(hours = -8) #hack way to offset to real timezone
-	#try:
-	#	print "========="+page.tzone
-	#	date += datetime.timedelta(hours = page.tzone)
-	#except:
-	#	print "=========NA"
+	date += datetime.timedelta(hours = page.tzone) 
 	return (date)
 
 def get_info(refresh=False):
@@ -93,7 +90,6 @@ class MainHandler(Handler):
 		data, month_anchors, days = get_info()
 		self.render("index.html", days = days, data = data, month_anchors = month_anchors)
 	def get(self):
-		#get_info(True)
 		self.render_page()
 
 class PostHandler(Handler):
@@ -112,7 +108,7 @@ class PostHandler(Handler):
 			self.render("post.html", error=error)
 			return
 		if title and href and desc and tzone:
-			p = Page(title=title, href=href, desc=desc, tzone=5)
+			p = Page(title=title, href=href, desc=desc, tzone=tzone)
 			p.put()
 			while (p.get(p.key()) == None):
 				time.sleep(0.01);
@@ -122,7 +118,44 @@ class PostHandler(Handler):
 		else:
 			error = "please fill all fields"
 			self.render("post.html", error=error)
-		
+	
+
+
+def json_switch(api):
+	return {
+		'ski':json_ski, #ski slope game from aug 7
+		'nyt':json_nyt
+	}.get(api,json_na)
+
+def json_na(request):
+	return {"request":None}
+
+def json_nyt(request):
+	return {"request":{"name":request.get("name")}}
+
+def json_ski(request):
+	num_requests   = request.get("num")
+	fetch_requests = request.get("f")
+	if not num_requests:
+		num_requests = 5
+	top_scores = db.GqlQuery("SELECT * FROM TopScore ORDER BY score DESC").fetch(limit=int(num_requests))
+	scores = [{"name":score.name,"score":score.score,"donuts":score.donuts,"date":date_to_json(score.date)} for score in top_scores]
+	json_top_scores = {"request":{"scores":scores}}
+	return json_top_scores
+
+def date_to_json(date):
+	# Convert date/datetime to MILLISECONDS-since-epoch (JS "new Date()").
+	#copied from http://stackoverflow.com/questions/1531501/json-serialization-of-google-app-engine-models
+	ms = time.mktime(date.utctimetuple()) * 1000
+	ms += getattr(date, 'microseconds', 0) / 1000
+	return int(ms)
+
+class JSONHandler(Handler):
+	def get(self):
+		api = self.request.get("api")
+		json_obj = json_switch(api)(self.request) #dictionary based switch statement on functions
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(json.dumps(json_obj));	
 
 
 class Aug4Handler(Handler):
@@ -137,20 +170,9 @@ class Aug6Handler(Handler):
 	def get(self):
 		self.render("aug_6.html")
 
-def get_js_top_score_data(refresh = False):
-	key = 'aug_7_top_scores_js_data'
-	if not refresh and key in CACHE:
-		return CACHE[key]
-	else:
-		print 'GqlQuery: '+ key
-		top_scores = db.GqlQuery("SELECT * FROM TopScore ORDER BY score DESC").fetch(limit=5)
-		js_top_score_data = ','.join(['{"name":"%s","score":"%s","donuts":"%s","date":"%s","loc":"%s"}' %(score.name, score.score, score.donuts, score.date,score.loc) for score in top_scores])
-		CACHE[key] = js_top_score_data
-		return js_top_score_data
-
 class Aug7Handler(Handler):
 	def get(self):
-		self.render("aug_7.html", data=get_js_top_score_data())
+		self.render("aug_7.html")
 	def post(self):
 		name  = self.request.get("name")
 		loc   = self.request.get("loc")
@@ -203,6 +225,40 @@ class Aug13Handler(Handler):
 	def get(self):
 		self.render('aug_13.html')
 
+class Aug14Handler(Handler):
+	def get(self):
+		self.render('aug_14.html')
+
+class Aug15Handler(Handler):
+	def get(self):
+		self.render('aug_15.html')
+
+nyt_api_key = 'b1ee2e9937cc362be3892ed1e2ea0eff:0:58566570'
+nyt_json_url = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=romney&begin_date=20120101&end_date=20120101&facet_field=day_of_week&fl=keywords&api-key='+nyt_api_key
+class Aug16Handler(Handler):
+	def get(self):
+		data = json.load(urllib2.urlopen(nyt_json_url))
+		nyt_json = [kw['value'] for entries in data['response']['docs'] for kw in entries['keywords'] if kw['name'] == 'glocations']
+		self.render('aug_16.html', nyt_json = ",".join(['"'+entry+'"' for entry in nyt_json]), num_res = len(data['response']['docs']))
+
+class Aug17Handler(Handler):
+	def get(self):
+		self.render('aug_17.html')
+
+class Aug18Handler(Handler):
+	def get(self):
+		self.render('aug_18.html')
+
+class Aug19Handler(Handler):
+	def get(self):
+		self.render('aug_19.html')
+
+class Aug20Handler(Handler):
+	def get(self):
+		self.render('aug_20.html')
+
+
+
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
@@ -216,6 +272,14 @@ app = webapp2.WSGIApplication([
 	('/11-AUG', Aug11Handler),
 	('/12-AUG', Aug12Handler),
 	('/13-AUG', Aug13Handler),
+	('/14-AUG', Aug14Handler),
+	('/15-AUG', Aug15Handler),
+	('/16-AUG', Aug16Handler),
+	('/17-AUG', Aug17Handler),
+	('/18-AUG', Aug18Handler),
+	('/19-AUG', Aug19Handler),
+	('/20-AUG', Aug20Handler),
+	('/json', JSONHandler),
 	('/.*',  MainHandler)
 ], debug=True)
 

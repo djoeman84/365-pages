@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello Google Maps</title>
+	<meta name="viewport" content="user-scalable=no, width=device-width" />
+	<link rel="stylesheet" type="text/css" href="/css/aug_16.css">
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRD9Wnf-VoyOMmglyB8sTY-5F6uF2ofPs&sensor=false"></script>
+	<script type="text/javascript" src="/js/aug_16.js"></script>
+		<script type="text/javascript">
+			var nyt_json = [ {{ nyt_json|safe }} ];
+			var num_res = {{ num_res }};
+		</script>
+</head>
+	<body onload="init_js()">
+		<div id="google-maps-canvas"></div>
+	</body>
+</html>

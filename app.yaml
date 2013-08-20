@@ -19,6 +19,9 @@ handlers:
 - url: /js
   static_dir: assets/js
 
+- url: /html
+  static_dir: assets/html
+
 - url: /font
   static_dir: assets/font
 

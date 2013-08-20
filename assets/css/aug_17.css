@@ -1,0 +1,52 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	margin-bottom: 0px;
+	word-spacing: 0px;
+	letter-spacing: 0px;
+}
+
+body {
+	margin: 4px;
+}
+
+
+.spin-block {
+	width: 30px;
+	height: 30px;
+	margin: 0px;
+	margin-left: 2px;
+	margin-right: 2px;
+	padding: 0px;
+	display: inline-block;
+	word-spacing: 0px;
+	letter-spacing: 0px;
+
+	transition:0.2s;
+	-webkit-transition:0.2s;
+}
+
+.spin-block:hover {
+	transform:rotate(360deg);
+	-webkit-transform:rotateX(180deg);
+}
+
+.pink {
+	background-color: rgb(255, 223, 239);
+}
+
+.green {
+	background-color: #27DE55;
+}
+
+.blue {
+	background-color: #99C7FF;
+}
+
+.white {
+	background-color: white;
+}
+
+.to-blue:hover{
+	background-color: blue;
+}

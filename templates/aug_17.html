@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Color Tiles</title>
+	<link rel="stylesheet" type="text/css" href="/css/aug_17.css">
+</head>
+	<body id="body">
+	</body>
+		<script type="text/javascript">
+		var colors = ['white','pink','blue','green'];
+		function random_color() {
+			return colors[Math.floor(Math.random()*colors.length)];
+		}
+		var body = document.getElementById('body');
+		for (var i = 0; i < 2000; i++) {
+			var div = document.createElement('div');
+			div.className = "spin-block to-blue "+random_color();
+			body.appendChild(div);
+		};
+	</script>
+</html>
