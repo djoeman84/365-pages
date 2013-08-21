@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Pretty Box</title>
+	<title>Friend Finder</title>
 	<link rel="stylesheet" type="text/css" href="/css/aug_21.css">
 	<script type="text/javascript" src="/js/aug_21_login.js"></script>
 	<script type="text/javascript" src="/js/aug_21_game.js"></script>
@@ -10,7 +10,9 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 	<body>
-		<a href="javascript:logout()" class="hide" id="logout-btn">logout</a>
+		<div id="logout-wrapper">
+			<a href="javascript:logout()" class="hide" id="logout-btn">logout</a>
+		</div>
 		<div id="wrapper">
 			<div class="box-container full" id="welcome-box">
 				<div class="inner-box top">
@@ -29,8 +31,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="box-container left  hide" id="game-box-left">
-				<img class="profile-large" id="jumbo-friend-pic">
+			<div class="box-container left hide" id="game-box-left">
+				<div class="top" id="friend-profile-top">
+					<img class="profile-large" id="jumbo-friend-pic">
+				</div>
+				<div class="bottom" id="friend-profile-bottom"></div>
+
 			</div>
 			<div class="box-container right hide" id="game-box-right"></div>
 		</div>

@@ -1,5 +1,6 @@
 * {
 	font-family:arial, helvetica, sans-serif;
+	text-align: center;
 }
 
 html {
@@ -14,9 +15,17 @@ a {
 body {
 	background-image: url('../img/cream_pixels.png');
 }
-	#logout-btn {
-		color: gray;
+
+	div#logout-wrapper {
+		text-align: left;
+		position: absolute;
+		top: 0.5em;
+		left: 0.7em;
 	}
+
+		#logout-btn {
+			color: gray;
+		}
 
 	#logout-btn:hover, #logout-btn:focus {
 		color: LightBlue;
@@ -44,11 +53,11 @@ body {
 			}
 
 				div#logged-in-jumbo {
-					text-align: center;
+					padding-top: 4.5em;
 				}
 
 					img#jumbo-prof-pic {
-						margin-top: 4em;
+						margin: auto;
 					}
 
 					span#jumbo-prof-greeting {
@@ -63,16 +72,13 @@ body {
 				}
 
 			h1.jumbo-title {
-				text-align: center;
 				font-size: 60px;
 			}
 
 			div.button-wrapper {
-				text-align: center;
 			}
 
 				.btn {
-					text-align: center;
 					display: inline-block;
 					border-radius: 0.2em;
 					padding: 0.2em 0.25em;
@@ -88,8 +94,22 @@ body {
 				}
 
 
+
+		div#game-box-left{
+
+		}
+
+			div#friend-profile-top {
+				padding-top: 4.5em;
+			}
+
+			div#friend-profile-bottom {
+				padding: 1em;
+				font-size: 20px;
+			}
+
+
 		div.box-container {
-			display: inline-block;
 			height: 100%;
 		}
 
@@ -111,6 +131,7 @@ body {
 /* general */
 img.profile-large {
 	border-radius: 50%;
+	box-shadow: 0px 1px 10px #819bcb;
 }
 
 

@@ -21,11 +21,21 @@ function query_fb_for_friends () {
 
 function play_game () {
 	shuffle(friend_data);
-	var i = 0;
+	var i = 1;
+	update_display(0);
 	game_interval = setInterval(function () {
-		FB.api('/'+friend_data[i].uid+'?fields=picture.width(200).height(200)', function (r) {
-			setImgSrc('jumbo-friend-pic', r.picture.data.url);
-		});
-		i++;
+		update_display(i);
 	}, seconds_per_slide * 1000);
+}
+
+function update_display (i) {
+	FB.api('/'+friend_data[i].uid+'?fields=picture.width(200).height(200)', function (r) {
+		setImgSrc('jumbo-friend-pic', r.picture.data.url);
+	});
+	document.getElementById('friend-profile-bottom').innerHTML = friend_data[i].name;
+	i++;
+	if (i === friend_data.length) {
+		shuffle(friend_data);
+		i = 0;
+	}
 }
