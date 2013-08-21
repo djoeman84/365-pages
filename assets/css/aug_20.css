@@ -2,13 +2,16 @@ html {
 	height: 100%;
 }
 
+li {
+	list-style-type: none;
+}
+
 body {
 	margin: 0px;
 	height: 100%;
 }
-	ul {
+	ul.banner {
 		list-style-type: none;
-		display: inline-block;
 		float: right;
 		margin:0px;
 		border: black solid 1px;
@@ -18,7 +21,7 @@ body {
 		padding: 0px;
 	}
 
-		li {
+		li.banner {
 			color: white;
 			float: right;
 			display: inline-block;
@@ -26,7 +29,7 @@ body {
 			padding-right: 10px;
 		}
 
-		li:first-child {
+		li.banner:first-child {
 			margin-right: 5em;
 		}
 
@@ -39,8 +42,9 @@ body {
 				color: LightBlue;
 			}
 
-		#find-friends-li {
+		#find-friends-div {
 			display: none;
+			padding: 0.3em 0.4em;
 		}
 
 			#find-friends {
@@ -48,6 +52,7 @@ body {
 				border: LightBlue solid 1px;
 				border-radius: 0.2em;
 				padding: 0.1em 0.4em;
+				text-align: center;
 			}
 			#find-friends:hover, #find-friends:focus {
 				border-color: LightGray;
@@ -63,3 +68,28 @@ body {
 	#fb-root {
 		display: none;
 	}
+
+	#left-hud {
+		position: fixed;
+		bottom: 10px;
+		right: 10px;
+		width: 200px;
+		display: block;
+		background-color: gray;
+		border-radius: 5px;
+		z-index: 100000;
+	}
+
+		#left-hud-title {
+			text-align: center;
+			color: LightBlue;
+			font-size: 25px;
+		}
+
+		#left-hud-ul {
+			padding: 5px;
+		}
+
+			#left-hud-li {
+				font-size: 15px;
+			}
