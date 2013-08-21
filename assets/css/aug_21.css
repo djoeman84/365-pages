@@ -111,6 +111,8 @@ body {
 
 		div.box-container {
 			height: 100%;
+			vertical-align: top;
+			display: inline-block;
 		}
 
 		div.box-container.left {
