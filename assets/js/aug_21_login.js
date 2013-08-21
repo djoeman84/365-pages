@@ -1,7 +1,8 @@
 var sign_in_interval;
 
 function init_js () {
-	sign_in_interval = setInterval(check_if_signed_in(), 1000/2);
+	sign_in_interval = setInterval(check_if_signed_in(), second/2);
+	init_google_maps();
 }
 
 function check_if_signed_in () {

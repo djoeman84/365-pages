@@ -1,3 +1,5 @@
+var second = 1000;
+
 function displayId (elem_id) {
 	//remove hide and surrounding space if possible
 	var elem = document.getElementById(elem_id);
