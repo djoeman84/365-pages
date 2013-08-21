@@ -48,7 +48,6 @@ body {
 				}
 
 					img#jumbo-prof-pic {
-						border-radius: 50%;
 						margin-top: 4em;
 					}
 
@@ -105,6 +104,14 @@ body {
 		div.box-container.full {
 			width: 100%;
 		}
+
+
+
+
+/* general */
+img.profile-large {
+	border-radius: 50%;
+}
 
 
 /* utility */

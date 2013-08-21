@@ -26,7 +26,7 @@ function check_if_signed_in () {
 
 function transition_to_game () {
 	hideId('welcome-box');
-	play_game();
+	init_game();
 }
 
 function login () {
