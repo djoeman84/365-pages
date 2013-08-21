@@ -14,6 +14,13 @@ a {
 body {
 	background-image: url('../img/cream_pixels.png');
 }
+	#logout-btn {
+		color: gray;
+	}
+
+	#logout-btn:hover, #logout-btn:focus {
+		color: LightBlue;
+	}
 
 	div#wrapper {
 		position: absolute;
@@ -53,7 +60,7 @@ body {
 					}
 
 				.button-wrapper#login {
-					padding-top: 9em;
+					margin-top: -1.7em;
 				}
 
 			h1.jumbo-title {

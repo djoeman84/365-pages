@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 	<body>
+		<a href="javascript:logout()" class="hide" id="logout-btn">logout</a>
 		<div id="wrapper">
 			<div class="box-container full" id="welcome-box">
 				<div class="inner-box top">
@@ -17,19 +18,19 @@
 						<img class="profile-large" id="jumbo-prof-pic">
 						<span id="jumbo-prof-greeting"></span>
 					</div>
-					<div class="button-wrapper" id="login">
-						<a class="btn large blue hide" id="login-button" href="javascript:login()">Login with Facebook</a>
-					</div>
 				</div>
 				<div class="inner-box bottom">
 					<h1 class="jumbo-title blue-font">Friend Finder</h1>
 					<div class="button-wrapper">
-						<a class="btn large blue hide" id="play-button" href="javascript:play_game()">Play Game</a>
+						<a class="btn large blue hide" id="play-button" href="javascript:transition_to_game()">Play Game</a>
+					</div>
+					<div class="button-wrapper" id="login">
+						<a class="btn large blue hide" id="login-button" href="javascript:login()">Login with Facebook</a>
 					</div>
 				</div>
 			</div>
-			<div class="box-container left  hide"></div>
-			<div class="box-container right hide"></div>
+			<div class="box-container left  hide" id="game-box-left"></div>
+			<div class="box-container right hide" id="game-box-right"></div>
 		</div>
 		<div id="fb-root"></div>
 	</body>
