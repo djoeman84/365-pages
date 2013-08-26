@@ -233,8 +233,8 @@ function smooth_line_graph (i, elem_class) {
 	ctx.beginPath();
 	ctx.fillStyle = colors[0];
 	
+	var first_run = true;
  	if (data.length) {
- 		ctx.moveTo((min_date/date_diff)*g_width);
  		for (var x = graph_coord.left; x < graph_coord.right; x++) {
  			//get height based off of left and right data points
  			var aprox_date = (x - graph_coord.left)*date_diff/g_width + min_date;
@@ -260,8 +260,12 @@ function smooth_line_graph (i, elem_class) {
 
  			var y = y_ceil * (x_floor_ratio/net_diff) + y_floor * (x_ceil_ratio/net_diff);
 
-
- 			ctx.lineTo(x,y);
+ 			if (first_run) {
+ 				ctx.moveTo(x,y);
+ 				first_run = false;
+ 			} else {
+ 				ctx.lineTo(x,y);
+ 			}
  		};
  	}
 	

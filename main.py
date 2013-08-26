@@ -184,10 +184,10 @@ class Aug7Handler(Handler):
 				ts = TopScore(name=name,score=score,donuts=donuts,loc=loc)
 			else:
 				ts = TopScore(name=name,score=score,donuts=donuts)
+		ts.put()
 		while (ts.get(p.key()) == None):
 			time.sleep(0.01);
 			print 'wait'
-		ts.put()
 		print "post: name-"+name+"\nloc-"+loc+"\nscore-"+str(score)+"\ndonuts-"+str(donuts)
 		get_js_top_score_data(True)
 
