@@ -1,8 +1,14 @@
 var sign_in_interval;
+var state = 'login';
 
 function init_js () {
 	sign_in_interval = setInterval(check_if_signed_in(), second/2);
 	init_google_maps();
+}
+
+function init_login () {
+	display_login_body_elems();
+	check_if_signed_in();
 }
 
 function check_if_signed_in () {
@@ -26,9 +32,19 @@ function check_if_signed_in () {
 
 
 function transition_to_game () {
-	hideId('welcome-box');
+	hide_login_body_elems();
+	state = 'game';
 	init_game();
 }
+
+function hide_login_body_elems () {
+	hideId('welcome-box');
+}
+
+function display_login_body_elems () {
+	displayId('welcome-box');
+}
+
 
 function login () {
 	FB.login(function (response) {
@@ -40,6 +56,9 @@ function login () {
 function logout () {
 	FB.logout(function (response) {
 		console.log('logged out');
+		if (state === 'game') {
+			transfer_to_login();
+		}
 		check_if_signed_in();
 	});
 }

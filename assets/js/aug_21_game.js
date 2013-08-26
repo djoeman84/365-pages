@@ -2,18 +2,34 @@ var friend_data;
 var game_interval;
 var timer_interval;
 var current_friend_index;
+var game_pause = false;
+var net_distance = 0;
 
-var seconds_per_slide = 10;
+var seconds_per_slide = 6;
 
 function init_game () {
-	displayId('game-box-left');
-	displayId('game-box-right');
+	display_game_body_elems();
 	check_map_resize();
 	center_map();
 
 	query_fb_for_friends();
 }
 
+function transfer_to_login () {
+	hide_game_body_elems();
+	init_login();
+}
+
+function hide_game_body_elems () {
+	hideId('game-box-left');
+	hideId('game-box-right');
+}
+
+
+function display_game_body_elems () {
+	displayId('game-box-left');
+	displayId('game-box-right');
+}
 
 function query_fb_for_friends () {
 	//get uid, name, hometown,
@@ -56,25 +72,42 @@ function update_profile_anchor () {
 
 function update_timer () {
 	var timer    = document.getElementById('time');
-	var time_left = seconds_per_slide;
+	var time_left = seconds_per_slide - 1;
 	timer.className = 'pea-green-font';
+	clear_hometown();
 	timer.innerHTML = time_left;
 	clearInterval(timer_interval);
 	timer_interval = setInterval(function () {
 		time_left--;
 		timer.innerHTML =  time_left;
-		if (time_left > 6) timer.className = 'pea-green-font';
-		else if (time_left > 2) timer.className = 'yellow-font';
+		if (time_left > 2) timer.className = 'pea-green-font';
 		else timer.className = 'red-font';
 		
 	}, 1*second);
 }
 
 
+function next_slide () {
+	clearInterval(game_interval);
+	current_friend_index++;
+	update_display();
+	game_interval = setInterval(update_display, seconds_per_slide * second);
+}
+
 function map_clicked (lat, lon) {
-	var dist = get_distance_from_real_hometown(lat, lon);
-	console.log('dist: '+dist);
-	drop_pin_at_real_hometown();
+	if (!game_pause) {
+		game_pause = true;
+		clearInterval(timer_interval);
+		net_distance += (get_distance_from_real_hometown(lat, lon));
+		console.log((net_distance/1000)+'km');//m to km
+		console.log(get_distance_from_real_hometown(lat, lon));
+		drop_pin_at_real_hometown();
+		display_hometown();
+		setTimeout(function () {
+			next_slide();
+			game_pause = false;
+		}, 1 * second);
+	}
 }
 
 function get_distance_from_real_hometown (lat, lon) {
@@ -85,5 +118,34 @@ function drop_pin_at_real_hometown () {
 	drop_pin(friend_data[current_friend_index].hometown_location.latitude,
 		friend_data[current_friend_index].hometown_location.longitude,
 		friend_data[current_friend_index].hometown_location.name,
-		5);
+		3);
 }
+
+function display_hometown () {
+	var home_town_p = document.getElementById('hometown-display');
+	home_town_p.innerHTML = friend_data[current_friend_index].hometown_location.name;
+}
+
+function clear_hometown () {
+	var home_town_p = document.getElementById('hometown-display');
+	home_town_p.innerHTML = '';
+}
+
+
+
+
+
+
+
+
+
+
+$(document).keydown(function(e){
+	if (e.keyCode == 39) { //right
+		next_slide();
+	}
+});
+
+
+
+

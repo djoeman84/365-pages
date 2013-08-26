@@ -111,6 +111,13 @@ body {
 				font-size: 20px;
 			}
 
+				p#hometown-display {
+					height: 1em;
+					color: gray;
+					font-size: 12px;
+					margin: 0;
+				}
+
 				p.timer {
 					font-family: digi;
 				}
@@ -162,7 +169,7 @@ img.profile-large {
 	box-shadow: 0px 1px 10px #819bcb;
 }
 
-img.profile-large.200 {
+img.profile-large.size-200 {
 	height: 200px;
 	width: 200px;
 }
