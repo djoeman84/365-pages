@@ -39,3 +39,27 @@ function shuffle(array) {
 
 	return array;
 }
+
+function addEventHandler(obj, evt, handler) {
+    if(obj.addEventListener) {
+        // W3C method
+        obj.addEventListener(evt, handler, false);
+    } else if(obj.attachEvent) {
+        // IE method.
+        obj.attachEvent('on'+evt, handler);
+    } else {
+        // Old school method.
+        obj['on'+evt] = handler;
+    }
+}
+
+Function.prototype.bindToEventHandler = function bindToEventHandler() {
+	var handler = this;
+	var boundParameters = Array.prototype.slice.call(arguments);
+	//create closure
+	return function(e) {
+		e = e || window.event; // get window.event if e argument missing (in IE)   
+		boundParameters.unshift(e);
+		handler.apply(this, boundParameters);
+	}
+};

@@ -1,3 +1,101 @@
 /*
 	365-pages by Joe Delgado. github.com/djoeman84
 */
+html, body {
+	height: 100%;
+	margin: 0px;
+}
+
+	body {
+		background-image: url('../img/aug_23/fabric_plaid.png');
+	}
+
+		div#header-wrapper, div#header-padding, div#header-color {
+			height: 3em;
+			width: 100%;
+			margin: 0px;
+		}
+
+		div#header-wrapper {
+			position: fixed;
+			box-shadow: 0em 0em 0.5em black;
+
+		}
+			div#header-color {
+				background-color: white;
+				z-index: 10;
+			}
+
+			div#header-wrapper > div#logo-wrapper-shadow,
+			div#header-wrapper > div#logo-wrapper {
+				position: fixed;
+				top: 0em;
+				left: 2em;
+				height: 4em;
+				width: 4em;
+				padding: 0.5em;
+				border-radius: 50%;
+			}
+
+			div#header-wrapper > div#logo-wrapper-shadow {
+				box-shadow: 0em 0em 0.5em black;
+				z-index: -1;
+			}
+
+			div#header-wrapper > div#logo-wrapper {
+				background-color: white;
+			}
+
+				div#header-wrapper > div#logo-wrapper > div#logo-img-drop {
+					border: 2px dashed lightgray;
+					text-align: center;
+					margin: -1px;
+				}
+					div#header-wrapper > div#logo-wrapper > div#logo-img-drop > div {
+						line-height: 2em;
+						vertical-align: middle;
+						font-size: 30px;
+						color: lightgray;
+					}
+
+				div#header-wrapper > div#logo-wrapper > div#logo-img-drop:hover, 
+				div#header-wrapper > div#logo-wrapper > div#logo-img-drop:focus {
+					border: 2px dashed green;
+					text-align: center;
+				}
+
+					div#header-wrapper > div#logo-wrapper > div#logo-img-drop:hover > div, 
+					div#header-wrapper > div#logo-wrapper > div#logo-img-drop:focus > div {
+						color: green;
+					}
+
+		div#body-wrapper {
+			height: 100%;
+			width: 100%;
+		}
+
+			div#body-wrapper > div#inner-body {
+				margin: 1% 2%;
+				background-color: white;
+				height: 100%;
+				width: 96%;
+			}
+
+
+.small {
+	height: 4em;
+	width: 4em;
+}
+
+.round {
+	border-radius: 50%;
+}
+
+.hide {
+	display: none;
+}
+
+ul {
+	margin: 0;
+	list-style-type: none;
+}
