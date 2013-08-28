@@ -36,6 +36,13 @@ def check_secure_val(h):
         if h == make_secure_val(val):
                 return val
 
+NEW_CACHE = {}
+def cached_query(query, fetch_quant = 10, refresh = False):
+	if (query,fetch_quant) not in NEW_CACHE or refresh:
+		NEW_CACHE[(query,fetch_quant)] = db.GqlQuery(query).fetch(limit=fetch_quant)
+	return NEW_CACHE[(query,fetch_quant)]
+
+
 
 class Page(db.Model):
 	title = db.StringProperty(required = True)
@@ -74,7 +81,7 @@ def get_info(refresh=False):
 		return CACHE[key]['data'], CACHE[key]['month_anchors'], CACHE[key]['days']
 	else:
 		print '::GqlQuery'
-		pages = db.GqlQuery("SELECT * FROM Page ORDER BY date ASC").fetch(limit=365)
+		pages = db.GqlQuery("SELECT * FROM Page ORDER BY date ASC").fetch(limit=366)
 		days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(get_date(page).day) + " " + months[get_date(page).month],"day":days_of_week[get_date(page).weekday()]} for page in pages]
 		data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s","month":%d}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href,get_date(page).month) for page in pages])
 		month_anchors = ['' for x in range(13)] #13 since month 0 is nothing
@@ -124,7 +131,8 @@ class PostHandler(Handler):
 def json_switch(api):
 	return {
 		'ski':json_ski, #ski slope game from aug 7
-		'nyt':json_nyt
+		'nyt':json_nyt,
+		'pgs':json_pages
 	}.get(api,json_na)
 
 def json_na(request):
@@ -142,6 +150,16 @@ def json_ski(request):
 	scores = [{"name":score.name,"score":score.score,"donuts":score.donuts,"date":date_to_json(score.date)} for score in top_scores]
 	json_top_scores = {"request":{"scores":scores}}
 	return json_top_scores
+
+def json_pages(request):
+	num_requests = request.get("num");
+	if not num_requests:
+		num_requests = 366
+	q = cached_query(query = 'SELECT * FROM Page ORDER BY date ASC', fetch_quant = 366)
+	return {"request":{"pages":[{"title":pg.title,"href":pg.href} for pg in q]}}
+
+
+
 
 def date_to_json(date):
 	# Convert date/datetime to MILLISECONDS-since-epoch (JS "new Date()").
@@ -285,6 +303,13 @@ class Aug27Handler(Handler):
 	def get(self):
 		self.render('aug_27.html')
 
+class Aug28Handler(Handler):
+	def get(self):
+		self.render('aug_28.html')
+
+class Aug29Handler(Handler):
+	def get(self):
+		self.render('aug_29.html')
 
 
 app = webapp2.WSGIApplication([
@@ -313,6 +338,8 @@ app = webapp2.WSGIApplication([
 	('/25-AUG', Aug25Handler),
 	('/26-AUG', Aug26Handler),
 	('/27-AUG', Aug27Handler),
+	('/28-AUG', Aug28Handler),
+	('/29-AUG', Aug29Handler),
 	('/json', JSONHandler),
 	('/.*',  MainHandler)
 ], debug=True)

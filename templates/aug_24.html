@@ -2,25 +2,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Page Template</title>
+	<title>Build a Page</title>
 	<link rel="stylesheet" type="text/css" href="./css/aug_24.css">
 </head>
 <body onload="init_js()">
 	<div id="header-wrapper">
-		<div id="header-color"></div>
 		<div id="logo-wrapper-shadow"></div>
-		<div id="logo-wrapper">
-			<div id="logo-img-drop" class="small round" title="drop logo image here"><div>+</div></div>
-			<!--<input type="url" id="logo-url"onkeyup="url_typed()" placeholder="logo url">-->
-			<img class="small round hide" id="header-logo">
+		<div id="header-color"></div>
+		<div id="logo-wrapper" class="drop-img-div">
+			<div id="logo-img-drop" class="small round drop-img-anchor" title="drop logo image here"><div class="drop-plus">+</div></div>
+			<img class="small round hide drop-img-target" id="header-logo">
 		</div>
 		<ul id="header-ul">
-
-		</ul>
+			<li><span id="company-name" contentEditable="true">Company Name</span></li>
+		</ul>	
 	</div>
 	<div id="header-padding"></div>
 	<div id="body-wrapper">
-		<div id="inner-body"></div>
+		<div id="inner-body">
+			<div id="jumbo-img-wrap" class="drop-img-div">
+				<div id="jumbo-img-drop" class="drop-img-anchor" title="drop jumbo image here"><div class="drop-plus">+</div></div>
+				<img class="hide drop-img-target" id="jumbo-img">
+			</div> <!--jumbo-img-wrap -->
+			<h1 class="no-return center" contentEditable="true">Your Great Header</h1>
+			<h3 class="center" contentEditable="true">Our Great Company Makes products that everyone can enjoy. <br> We are the greatest and bestest ever!</h3>
+			<div id="body-content">
+				<div id="left-img-body" class="drop-img-div left">
+					<div class="large round drop-img-anchor"><div class="drop-plus">+</div></div>
+					<img class="large round drop-img-target hide">
+				</div>
+				<div id="content-text">
+					<h2 contentEditable="true" class="no-return">Section head</h2>
+					<p contentEditable="true">Our team is full of hard working people who want to make a difference. Blah Blah Blah.<br>Come buy our things!</p>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>

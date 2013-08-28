@@ -15,6 +15,19 @@ function hideId (elem_id) {
 	}
 }
 
+function displayElem (elem) {
+	//remove hide and surrounding space if possible
+	elem.className = elem.className.replace(' hide','');
+	elem.className = elem.className.replace('hide ','');
+	elem.className = elem.className.replace('hide','');
+}
+
+function hideElem (elem) {
+	if (elem.className.indexOf('hide') === -1) {
+		elem.className += ' hide';
+	}
+}
+
 function setImgSrc (elem_id, img_src) {
 	document.getElementById(elem_id).src = img_src;
 }
@@ -38,6 +51,14 @@ function shuffle(array) {
 	}
 
 	return array;
+}
+
+function random_array_elem (array) {
+	return array[Math.floor(Math.random()*array.length)];
+}
+
+function uniform_w_prob (probability) {
+	return (Math.random() < probability);
 }
 
 function addEventHandler(obj, evt, handler) {

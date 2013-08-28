@@ -4,6 +4,7 @@
 html, body {
 	height: 100%;
 	margin: 0px;
+	font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 }
 
 	body {
@@ -22,8 +23,8 @@ html, body {
 
 		}
 			div#header-color {
+				position: fixed;
 				background-color: white;
-				z-index: 10;
 			}
 
 			div#header-wrapper > div#logo-wrapper-shadow,
@@ -39,39 +40,25 @@ html, body {
 
 			div#header-wrapper > div#logo-wrapper-shadow {
 				box-shadow: 0em 0em 0.5em black;
-				z-index: -1;
 			}
 
 			div#header-wrapper > div#logo-wrapper {
 				background-color: white;
 			}
 
-				div#header-wrapper > div#logo-wrapper > div#logo-img-drop {
-					border: 2px dashed lightgray;
-					text-align: center;
-					margin: -1px;
+			div#header-wrapper > ul#header-ul {
+				position: absolute;
+				right: 4em;
+				top: 50%;
+				margin-top: -0.5em;
+			}
+				div#header-wrapper > ul#header-ul > li > span#company-name {
+					font-weight: lighter;
 				}
-					div#header-wrapper > div#logo-wrapper > div#logo-img-drop > div {
-						line-height: 2em;
-						vertical-align: middle;
-						font-size: 30px;
-						color: lightgray;
-					}
-
-				div#header-wrapper > div#logo-wrapper > div#logo-img-drop:hover, 
-				div#header-wrapper > div#logo-wrapper > div#logo-img-drop:focus {
-					border: 2px dashed green;
-					text-align: center;
-				}
-
-					div#header-wrapper > div#logo-wrapper > div#logo-img-drop:hover > div, 
-					div#header-wrapper > div#logo-wrapper > div#logo-img-drop:focus > div {
-						color: green;
-					}
 
 		div#body-wrapper {
-			height: 100%;
 			width: 100%;
+			padding-bottom: 1em;
 		}
 
 			div#body-wrapper > div#inner-body {
@@ -79,23 +66,130 @@ html, body {
 				background-color: white;
 				height: 100%;
 				width: 96%;
+				padding-bottom: 1em;
 			}
+
+				div#body-wrapper > div#inner-body > div#jumbo-img-wrap {
+					width: 96%;
+					margin: auto;
+					padding-top: 2%;
+					height: 20em;
+				}
+
+					div#body-wrapper > div#inner-body > div#jumbo-img-wrap > div#jumbo-img-drop {
+						height: 100%;
+						line-height: 20em;
+						width: 100%;
+					}
+
+					div#body-wrapper > div#inner-body > div#jumbo-img-wrap > img#jumbo-img {
+						height: inherit;
+						width: inherit;
+					}
+
+				div#body-wrapper > div#inner-body > div#body-content {
+					display: inline-block;
+					padding-left: 3em;
+					padding-right: 3em;
+				}
+
+					div#body-wrapper > div#inner-body > div#body-content > div#left-img-body {
+						display: inline-block;
+					}
+
+					div#body-wrapper > div#inner-body > div#body-content > div#content-text {
+						display: inline-block;
+						vertical-align: top;
+						padding-left: 1em;
+					}
+
 
 
 .small {
 	height: 4em;
 	width: 4em;
 }
+	.small > .drop-plus {
+		line-height: 2em;
+	}
+
+.large {
+	height: 15em;
+	width: 15em;
+}
+	.large > .drop-plus {
+		line-height: 7.5em;
+	}
 
 .round {
 	border-radius: 50%;
 }
 
+	img.round {
+		box-shadow: 0px 1px 1px;
+	}
+
 .hide {
 	display: none;
 }
+
+.drop-img-anchor {
+	border: 1px dashed lightgray;
+	text-align: center;
+	margin: -1px;
+}
+
+	.drop-img-anchor > .drop-plus {
+		vertical-align: middle;
+		font-size: 30px;
+		color: lightgray;
+	}
+
+ .drop-img-anchor:hover,
+ .drop-img-anchor:focus {
+ 	border: 1px dashed green;
+ 	text-align: center;
+ 	background-color: #F0FFF0;
+ }
+
+ 	.drop-img-anchor:hover > .drop-plus,
+ 	.drop-img-anchor:focus > .drop-plus {
+ 		color: green;
+ 	}
+
+.center {
+	text-align: center;
+}
+
+.left {
+	float: left;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 50px;
+	margin-bottom: 0em;
+}
+
+h2 {
+	opacity: 0.60;
+	filter:alpha(opacity=060); /* For IE8 and earlier */
+	color: green;
+	margin-left: -1em;
+}
+
+h3 {
+	font-weight: lighter;
+	font-size: 20px;
+	opacity: 0.50;
+	filter:alpha(opacity=050); /* For IE8 and earlier */
+	margin: 0;
+	margin-bottom: 3em;
+}
+	
 
 ul {
 	margin: 0;
 	list-style-type: none;
 }
+
