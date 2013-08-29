@@ -1,4 +1,6 @@
 var second = 1000;
+var key = {'left':37,'up':38,'right':39,'down':40,'shift':16,'space':32,'tab':9};
+
 
 function displayId (elem_id) {
 	//remove hide and surrounding space if possible
@@ -83,4 +85,23 @@ Function.prototype.bindToEventHandler = function bindToEventHandler() {
 		boundParameters.unshift(e);
 		handler.apply(this, boundParameters);
 	}
+};
+
+
+function get_json_from_url (url, responseHandler) {
+	var xmlhttp;
+	
+	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	} else {// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			responseHandler(JSON.parse(xmlhttp.responseText));
+		}
+	}
+	xmlhttp.open("GET",url,true);
+	xmlhttp.send();
 };

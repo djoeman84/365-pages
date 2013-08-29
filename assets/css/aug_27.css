@@ -1,3 +1,74 @@
 /*
 	365-pages by Joe Delgado. github.com/djoeman84
 */
+/*
+ * Legal:
+ *    Debut Dark:
+ *      Background by  Luke McDonald from subtlepatterns.com
+ */
+
+body, html {
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+	.top, .bottom {width: 100%;margin: 0;}
+
+	.top {
+		height: 65%;
+		background-image: url('../img/aug_27/debut_dark.png');
+		position: absolute;
+		top:0;
+		box-shadow: 0px 2px 40px -10px black inset;
+	}
+
+
+
+	.bottom {
+		height: 35%;
+		background-color: lightgray;
+		position: absolute;
+		top:65%;
+		border-top: 2px solid gray;
+	}
+
+/*
+ * Carousel
+ */
+
+ #carousel {
+	position: absolute;
+	height: 80%;
+	width: 100%;
+	top: 10%;
+	background-color: white;
+}
+
+	#carousel > ul {
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		width: 100%;
+	}
+
+		#carousel > ul > li {
+			position: absolute;
+			display: inline-block;
+			height: 100%;
+			width: 30%;
+			margin: 0 1.5%;
+			background-color: blue;
+		}
+
+
+
+/*
+ * General
+ *
+ */
+
+
+ul {
+	list-style-type: none;
+}

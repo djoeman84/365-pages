@@ -18,7 +18,7 @@ var interval;
 var user_pressed_left = false;
 var user_pressed_right = false;
 
-var slide_time = 1*second; //seconds
+var slide_time = 1.5*second; //seconds
 var pause_time = slide_time/3;
 
 

@@ -76,21 +76,15 @@ def get_date(page):
 	return (date)
 
 def get_info(refresh=False):
-	key = 'main_daily_posts'
-	if (not refresh) and key in CACHE:
-		return CACHE[key]['data'], CACHE[key]['month_anchors'], CACHE[key]['days']
-	else:
-		print '::GqlQuery'
-		pages = db.GqlQuery("SELECT * FROM Page ORDER BY date ASC").fetch(limit=366)
-		days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(get_date(page).day) + " " + months[get_date(page).month],"day":days_of_week[get_date(page).weekday()]} for page in pages]
-		data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s","month":%d}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href,get_date(page).month) for page in pages])
-		month_anchors = ['' for x in range(13)] #13 since month 0 is nothing
-		for page in pages:
-			if not month_anchors[get_date(page).month]:
-				month_anchors[get_date(page).month] = str(page.key()).replace('-','_')
-		month_anchors = ','.join(['"%s"' %(a) for a in month_anchors])
-		CACHE[key] = {'data':data, 'month_anchors':month_anchors,'days':days}
-		return data, month_anchors, days
+	pages = cached_query(query='SELECT * FROM Page ORDER BY date ASC', fetch_quant = 366, refresh = False)
+	days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(get_date(page).day) + " " + months[get_date(page).month],"day":days_of_week[get_date(page).weekday()]} for page in pages]
+	data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s","month":%d}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href,get_date(page).month) for page in pages])
+	month_anchors = ['' for x in range(13)] #13 since month 0 is nothing
+	for page in pages:
+		if not month_anchors[get_date(page).month]:
+			month_anchors[get_date(page).month] = str(page.key()).replace('-','_')
+	month_anchors = ','.join(['"%s"' %(a) for a in month_anchors])
+	return data, month_anchors, days
 
 class MainHandler(Handler):
 	def render_page(self):
@@ -146,7 +140,7 @@ def json_ski(request):
 	fetch_requests = request.get("f")
 	if not num_requests:
 		num_requests = 5
-	top_scores = db.GqlQuery("SELECT * FROM TopScore ORDER BY score DESC").fetch(limit=int(num_requests))
+	top_scores = cached_query(query = 'SELECT * FROM TopScore ORDER BY score DESC', fetch_quant = int(num_requests))
 	scores = [{"name":score.name,"score":score.score,"donuts":score.donuts,"date":date_to_json(score.date)} for score in top_scores]
 	json_top_scores = {"request":{"scores":scores}}
 	return json_top_scores
@@ -155,7 +149,7 @@ def json_pages(request):
 	num_requests = request.get("num");
 	if not num_requests:
 		num_requests = 366
-	q = cached_query(query = 'SELECT * FROM Page ORDER BY date ASC', fetch_quant = 366)
+	q = cached_query(query = 'SELECT * FROM Page ORDER BY date ASC', fetch_quant = int(num_requests))
 	return {"request":{"pages":[{"title":pg.title,"href":pg.href} for pg in q]}}
 
 
