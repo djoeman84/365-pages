@@ -305,6 +305,18 @@ class Aug29Handler(Handler):
 	def get(self):
 		self.render('aug_29.html')
 
+class Aug30Handler(Handler):
+	def get(self):
+		self.render('aug_30.html')
+
+class Aug31Handler(Handler):
+	def get(self):
+		self.render('aug_31.html')
+
+class Sep1Handler(Handler):
+	def get(self):
+		self.render('sep_1.html')
+
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
@@ -334,6 +346,9 @@ app = webapp2.WSGIApplication([
 	('/27-AUG', Aug27Handler),
 	('/28-AUG', Aug28Handler),
 	('/29-AUG', Aug29Handler),
+	('/30-AUG', Aug30Handler),
+	('/31-AUG', Aug31Handler),
+	('/1-SEP',  Sep1Handler),
 	('/json', JSONHandler),
 	('/.*',  MainHandler)
 ], debug=True)

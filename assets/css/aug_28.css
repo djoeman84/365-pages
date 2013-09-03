@@ -1,3 +1,61 @@
 /*
 	365-pages by Joe Delgado. github.com/djoeman84
 */
+body, html {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	font-family:"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+	font-size: 70px;
+	text-align: center;
+}
+
+
+	#display {
+		font-size: 30px;
+		position: absolute;
+		left: 0;
+		overflow: scroll;
+		box-shadow: 0px 0px 5px gray inset;
+		margin: 6px;
+	}
+
+		ul#display-ul {
+			list-style-type: none;
+			text-align: left;
+		}
+
+			li.faded {
+				opacity: 0.60;
+				filter:alpha(opacity=060); /* For IE8 and earlier */
+			}
+
+	#outer-calc-body {
+		background-color: gray;
+		box-shadow: 0px 0px 10px gray;
+		right: 0;
+		height: 100%;
+		position: absolute;
+	}
+
+		#controls {
+
+		}
+
+			ul#keys-ul {
+				list-style-type: none;
+				padding: 0.3em;
+				margin: 0;
+			}
+
+				ul#keys-ul > li.key-li {
+					display: inline-block;
+					padding: 0 0.2em;
+					color: white;
+				}
+
+				 ul#keys-ul > li.key-li:hover {
+				 	color: lightblue;
+				 	cursor: pointer;
+				 }
+

@@ -3,14 +3,18 @@
 */
 var temp_json = '{"request": {"pages": [{"href": "http://365-pages.appspot.com/4-AUG", "title": "Random Article Generator"}, {"href": "http://365-pages.appspot.com/5-AUG", "title": "Translation Machine"}, {"href": "http://365-pages.appspot.com/6-AUG", "title": "Colors!"}, {"href": "http://365-pages.appspot.com/7-AUG", "title": "Ski Slope"}, {"href": "http://365-pages.appspot.com/8-AUG", "title": "Cookies"}, {"href": "http://365-pages.appspot.com/9-AUG", "title": "Text Analytics"}, {"href": "http://365-pages.appspot.com/10-AUG", "title": "Bambi"}, {"href": "http://365-pages.appspot.com/11-AUG", "title": "Ducks"}, {"href": "http://365-pages.appspot.com/12-AUG", "title": "CSS3 Drop-downs"}, {"href": "http://365-pages.appspot.com/13-AUG", "title": "Shapes"}, {"href": "http://365-pages.appspot.com/14-AUG", "title": "Accelerometer Ball"}, {"href": "http://365-pages.appspot.com/15-AUG", "title": "Falling Text"}, {"href": "http://365-pages.appspot.com/16-AUG", "title": "Hello Goole Maps"}, {"href": "http://365-pages.appspot.com/17-AUG", "title": "Color Tiles"}, {"href": "http://365-pages.appspot.com/18-AUG", "title": "Digital Clock"}, {"href": "http://365-pages.appspot.com/19-AUG", "title": "Facebook"}, {"href": "http://365-pages.appspot.com/20-AUG", "title": "Facebook API 2"}, {"href": "http://365-pages.appspot.com/21-AUG", "title": "Friend Finder"}, {"href": "http://365-pages.appspot.com/22-AUG", "title": "Pretty Form"}, {"href": "http://365-pages.appspot.com/23-AUG", "title": "Spinning Text"}, {"href": "http://365-pages.appspot.com/24-AUG", "title": "Build a Page"}, {"href": "http://365-pages.appspot.com/25-AUG", "title": "Zen Loading"}, {"href": "http://365-pages.appspot.com/26-AUG", "title": "Dyslexic Math"}]}}';
 
-var pages_json;
+var pages;
+var leftmost_page_index = 0;
 
 //// preferences /////
    var
    	 num_carousel_loading_tiles_left  = 1,
    	 num_carousel_loading_tiles_right = 1,
    	 num_carousel_tiles_to_display    = 3,
-   	 segue_time_between_times         = 1*second;
+   	 segue_time_between_times         = 0.6*second
+   	 total_tiles =      num_carousel_loading_tiles_left +
+						num_carousel_tiles_to_display +
+						num_carousel_loading_tiles_right;
 
 function init_js () {
 	if (true) {
@@ -24,22 +28,51 @@ function init_js () {
 }
 
 function json_loaded (json) {
-	pages_json = json;
+	pages = json.request.pages;
+
 	console.log('json loaded');
 }
 
+
+function load_right () {
+	//move leftmost tile to the right
+	get_left_most($('.carousel-tile')).style.left 
+		= (parseFloat((get_right_most($('.carousel-tile')).style.left).replace('%','')) 
+			+ (100/num_carousel_tiles_to_display)).toString() + '%';
+	//set iframe src to the corresponding page href
+	get_right_most($('.carousel-tile')).firstChild.src = pages[(leftmost_page_index + num_carousel_tiles_to_display)].href;
+}
+
+function load_left () {
+	if(leftmost_page_index - num_carousel_loading_tiles_left >= 0) {
+		//move rightmost tile to the left
+		get_right_most($('.carousel-tile')).style.left 
+			= (parseFloat((get_left_most($('.carousel-tile')).style.left).replace('%','')) 
+				- (100/num_carousel_tiles_to_display)).toString() + '%';
+		//set iframe src to the corresponding page href	
+		get_left_most($('.carousel-tile')).firstChild.src 
+			= pages[ (leftmost_page_index-num_carousel_loading_tiles_left) ].href;
+	}
+}
+
 function move_right () {
-	get_left_most($('.carousel-tile')).style.left = (parseFloat((get_right_most($('.carousel-tile')).style.left).replace('%','')) + (100/num_carousel_tiles_to_display)).toString() + '%';
-	$('.carousel-tile').animate({left:'-='+(
-		(100/num_carousel_tiles_to_display).toString()
-		)+'%'}, segue_time_between_times);
+	if(pages && !$('.carousel-tile').is(':animated') && (leftmost_page_index + num_carousel_tiles_to_display) !== pages.length) {
+		leftmost_page_index++;
+		load_right();
+		$('.carousel-tile').animate({left:'-='+(
+			(100/num_carousel_tiles_to_display).toString()
+			)+'%'}, segue_time_between_times);
+	}
 }
 
 function move_left () {
-	get_right_most($('.carousel-tile')).style.left = (parseFloat((get_left_most($('.carousel-tile')).style.left).replace('%','')) - (100/num_carousel_tiles_to_display)).toString() + '%';
-	$('.carousel-tile').animate({left:'+='+(
-		(100/num_carousel_tiles_to_display).toString()
-		)+'%'}, segue_time_between_times);
+	if(pages && !$('.carousel-tile').is(':animated') && leftmost_page_index!== 0) {
+		leftmost_page_index--;
+		load_left();
+		$('.carousel-tile').animate({left:'+='+(
+			(100/num_carousel_tiles_to_display).toString()
+			)+'%'}, segue_time_between_times);
+	}
 }
 
 
@@ -68,10 +101,6 @@ function get_right_most (tiles) {
 }
 
 function init_carousel_blocks () {
-	var total_tiles = num_carousel_loading_tiles_left +
-						num_carousel_tiles_to_display +
-						num_carousel_loading_tiles_right;
-
 	var tiles_ul = document.getElementById('carousel-tiles-ul');
 	for (var i = 0; i < total_tiles; i++) {
 		var tile = create_carousel_tile(i.toString());
@@ -87,18 +116,19 @@ function create_carousel_tile (id) {
 	var tile = document.createElement('li');
 	tile.id = id;
 	tile.className = 'carousel-tile';
+	var iframe = document.createElement('iframe');
+	tile.appendChild(iframe);
 	return tile;
 }
 
 
 $(document).keydown(function (e) {
+	console.log(leftmost_page_index);
 	switch (e.keyCode) {
 		case key.left:
-			console.log('left');
 			move_left();
 			return false;
 		case key.right:
-			console.log('right');
 			move_right();
 			return false;
 		default:
