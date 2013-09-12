@@ -1,0 +1,85 @@
+/*
+	365-pages by Joe Delgado. github.com/djoeman84
+*/
+html, body {
+	margin: 0;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+	div#phone {
+		margin: auto;
+		width: 280px;
+		height: 450px;
+		margin-top: 1%;
+		padding: 60px 10px 70px 10px;
+		background-color: black;
+		border-radius: 30px;
+	}
+
+		div#messages-panel-wrapper {
+			box-shadow: 0px 1px 6px inset;
+			z-index: 100000;
+			background-color: #F8F8F8;
+			height: 100%;
+		}
+
+			div#messages-wrapper {
+				padding: 1.2% 3% 0% 3%;
+				height: 90%;
+			}
+
+				ul#messages-ul {
+					list-style-type: none;
+					padding: 0;
+					margin: 0;
+					display: block;
+					overflow-y:scroll;
+					height: 100%;
+				}
+
+				ul#messages-ul::-webkit-scrollbar {
+					display: none;
+				}
+
+					li.message {
+						border-radius: 20px;
+						padding: 4px 12px;
+						margin: 3px 2px;
+						box-shadow: -2px 1px 10px rgba(0,0,0,.2);
+					}
+
+					li.message.mine {
+						float: right;
+						background-color: lightblue;
+					}
+
+					li.message.theirs{
+						float: left;
+						background-color: LightGreen;
+					}
+
+		div#messages-panel-wrapper > form {
+			border-top: 2px rgba(0, 0, 0, 0.1) solid;
+			padding: 2%;
+			height: 10%;
+			z-index: -1;
+		}		
+
+			div#messages-panel-wrapper > form > input[type="text"] {
+				border-radius: 4px;
+				width: 75%;
+				border: 2px #E0E0E0  solid;
+				margin-left: 3%;
+				height: 18px;
+			}
+
+			div#messages-panel-wrapper > form > input[type="submit"] {
+				float: right;
+				background-color: lightblue;
+				border: 2px #E0E0E0  solid;
+				border-radius: 3px;
+				height: 23px;
+			}
+
+
+

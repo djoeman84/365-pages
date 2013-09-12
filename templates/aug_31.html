@@ -1,2 +1,27 @@
 <!-- 365-pages by Joe Delgado. github.com/djoeman84 -->
 <!DOCTYPE html>
+<html>
+<head>
+	<title>Elevation Profile</title>
+	<link rel="stylesheet" type="text/css" href="./css/aug_31.css">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+</head>
+<body onload="init_js()">
+	<div id="map-canvas"></div>
+	<div id="display">
+		<form id="directions-form"onKeyDown="key_down(this, event)">
+			<input id="origin-input" type="text" name="origin" placeholder="from" autocomplete="off">
+			<input id="destination-input" type="text" name="destination" placeholder="to" autocomplete="off">
+		</form>
+		<div id="dist-disp"></div>
+	</div>
+	<div id="elevation-profile">
+		<div id="elev-title">Elevation Profile</div>
+		<canvas id="elev-canv">HTML5 Canvas not supported by your browser</canvas>
+	</div>
+	<script src="./js/aug_31/Plot.js" type="text/javascript"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRD9Wnf-VoyOMmglyB8sTY-5F6uF2ofPs&sensor=false"></script>
+	<script src="./js/aug_31/maps_api_interface.js" type="text/javascript"></script>
+	<script src="./js/aug_31/aug_31.js" type="text/javascript"></script>
+</body>
+</html>

@@ -14,6 +14,8 @@ import json
 import urllib2
 import hashlib
 import math
+from time import mktime
+from google.appengine.api import channel
 
 months = ["NONE","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 days_of_week = ["MON","TUE","WED","THR","FRI","SAT","SUN"]
@@ -36,20 +38,27 @@ def check_secure_val(h):
         if h == make_secure_val(val):
                 return val
 
-NEW_CACHE = {}
-def cached_query(query, fetch_quant = 10, refresh = False):
-	if (query,fetch_quant) not in NEW_CACHE or refresh:
-		NEW_CACHE[(query,fetch_quant)] = db.GqlQuery(query).fetch(limit=fetch_quant)
-	return NEW_CACHE[(query,fetch_quant)]
+def safe_get_list(arg_list, index, default=None):
+	if (index < len(arg_list) and index >= 0):
+		return arg_list[index]
+	else:
+		return default
+
+CACHE = {}
+def cached_query(query, fetch_quant = 10, refresh = True):
+	if (query,fetch_quant) not in CACHE or refresh:
+		CACHE[(query,fetch_quant)] = db.GqlQuery(query).fetch(limit=fetch_quant)
+	return CACHE[(query,fetch_quant)]
 
 
 
-class Page(db.Model):
-	title = db.StringProperty(required = True)
-	href = db.LinkProperty(required = True)
-	date = db.DateTimeProperty(auto_now_add = True)
-	desc = db.TextProperty(required = True)
-	tzone= db.IntegerProperty(required = True)
+class Post(db.Model):
+	title       = db.StringProperty(required = True)
+	href        = db.LinkProperty(required = True)
+	date_posted = db.DateTimeProperty(auto_now_add = True)
+	target_date = db.DateProperty(required = True, auto_now_add = False)
+	desc        = db.TextProperty(required = True)
+	tzone       = db.IntegerProperty(required = True)
 
 class TopScore(db.Model):
 	name   = db.StringProperty(required = True)
@@ -57,7 +66,12 @@ class TopScore(db.Model):
 	donuts = db.IntegerProperty(required = True)
 	date   = db.DateTimeProperty(auto_now_add = True)
 	loc    = db.GeoPtProperty(required = False)
-				
+
+class RecipieCard(db.Model):
+	submit_time  = db.DateTimeProperty(auto_now_add = True)
+	title        = db.StringProperty(required = True)
+	ingredients  = db.StringListProperty (required = True)
+	instructions = db.StringListProperty (required = True)
 
 
 class Handler(webapp2.RequestHandler):
@@ -69,20 +83,19 @@ class Handler(webapp2.RequestHandler):
 	def render(self, template, **kw):
 		self.write(self.render_str(template, **kw))
 
-CACHE = {}
-def get_date(page):
-	date = page.date
-	date += datetime.timedelta(hours = page.tzone) 
+def get_date_with_timezone(post):
+	date = post.date_posted
+	date += datetime.timedelta(hours = post.tzone) 
 	return (date)
 
 def get_info(refresh=False):
-	pages = cached_query(query='SELECT * FROM Page ORDER BY date ASC', fetch_quant = 366, refresh = False)
-	days = [{"id":str(page.key()).replace('-','_'),"href":page.href,"date":str(get_date(page).day) + " " + months[get_date(page).month],"day":days_of_week[get_date(page).weekday()]} for page in pages]
-	data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s","month":%d}' % (str(page.key()).replace('-','_'), page.title, page.desc, page.href,get_date(page).month) for page in pages])
+	posts = cached_query(query='SELECT * FROM Post ORDER BY target_date ASC', fetch_quant = 366, refresh = True)
+	days = [{"id":str(post.key()).replace('-','_'),"href":post.href,"date":str(post.target_date.day) + " " + months[post.target_date.month],"day":days_of_week[post.target_date.weekday()]} for post in posts]
+	data = ','.join(['"%s":{"title":"%s","desc":"%s","href":"%s","month":%d}' % (str(post.key()).replace('-','_'), post.title, post.desc, post.href,post.target_date.month) for post in posts])
 	month_anchors = ['' for x in range(13)] #13 since month 0 is nothing
-	for page in pages:
-		if not month_anchors[get_date(page).month]:
-			month_anchors[get_date(page).month] = str(page.key()).replace('-','_')
+	for post in posts:
+		if not month_anchors[post.target_date.month]:
+			month_anchors[post.target_date.month] = str(post.key()).replace('-','_')
 	month_anchors = ','.join(['"%s"' %(a) for a in month_anchors])
 	return data, month_anchors, days
 
@@ -95,21 +108,26 @@ class MainHandler(Handler):
 
 class PostHandler(Handler):
 	def get(self):
-		self.render("post.html", error="")
+		refresh = self.request.get("refresh")
+		posts = cached_query(query='SELECT * FROM Post ORDER BY target_date ASC', fetch_quant = 366, refresh = True)
+		likely_date = posts[len(posts) - 1].target_date + datetime.timedelta(days = 1)
+		self.render("post.html", error="", t_date=likely_date.strftime('%Y-%m-%d'))
 	def post(self):
-		title = self.request.get("title")
-		href  = self.request.get("href")
-		desc  = self.request.get("desc")
-		tzone = int(self.request.get("tzone"))
-		usr   = self.request.get("usr")
-		passw = self.request.get("pass")
+		title  = self.request.get("title")
+		href   = self.request.get("href")
+		desc   = self.request.get("desc")
+		tzone  = int(self.request.get("tzone"))
+		usr    = self.request.get("usr")
+		passw  = self.request.get("pass")
+		t_date = self.request.get("target_date")
 		print "\n\ntzone: " + str(tzone)
 		if (not passw == password) or (not usr == username):
 			error = "incorrect password"
 			self.render("post.html", error=error)
 			return
-		if title and href and desc and tzone:
-			p = Page(title=title, href=href, desc=desc, tzone=tzone)
+		if title and href and desc and tzone and t_date:
+			target_date = datetime.datetime.fromtimestamp(mktime(time.strptime(t_date,'%Y-%m-%d'))).date()
+			p = Post(title=title, href=href, desc=desc, tzone=tzone, target_date=target_date)
 			p.put()
 			while (p.get(p.key()) == None):
 				time.sleep(0.01);
@@ -149,7 +167,7 @@ def json_pages(request):
 	num_requests = request.get("num");
 	if not num_requests:
 		num_requests = 366
-	q = cached_query(query = 'SELECT * FROM Page ORDER BY date ASC', fetch_quant = int(num_requests))
+	q = cached_query(query = 'SELECT * FROM Post ORDER BY target_date ASC', fetch_quant = int(num_requests))
 	return {"request":{"pages":[{"title":pg.title,"href":pg.href} for pg in q]}}
 
 
@@ -167,7 +185,28 @@ class JSONHandler(Handler):
 		api = self.request.get("api")
 		json_obj = json_switch(api)(self.request) #dictionary based switch statement on functions
 		self.response.headers['Content-Type'] = 'application/json'
-		self.response.out.write(json.dumps(json_obj));	
+		self.response.out.write(json.dumps(json_obj))
+
+channels = {}
+class ChannelHandler(Handler):
+	def get(self):
+		api         = self.request.get("api")
+		key         = self.request.get("key")
+		m           = hashlib.md5()
+		m.update(api+key+str(time.time()))
+		digest = m.hexdigest()
+		channel_id  = channel.create_channel(digest)
+		if api+key not in channels:
+			channels[api+key] = []
+		channels[api+key].append(channel_id)
+		self.response.headers['Content-Type'] = 'application/json'
+		self.response.out.write(json.dumps({'channel_id':channel_id}))
+	def post(self):
+		api         = self.request.get("api")
+		key         = self.request.get("key")
+		print self.request.body
+		for channel_id in channels[api+key]:
+			channel.send_message(channel_id, self.request.body)
 
 
 class Aug4Handler(Handler):
@@ -317,6 +356,60 @@ class Sep1Handler(Handler):
 	def get(self):
 		self.render('sep_1.html')
 
+class Sep2Handler(Handler):
+	def get(self):
+		self.render('sep_2.html')
+
+class Sep3Handler(Handler):
+	def get(self):
+		db_cards   = cached_query(query='SELECT * FROM RecipieCard ORDER BY submit_time DESC', fetch_quant = 20, refresh = True)
+		disp_cards = [{'id':card.key(),'title':card.title,'ingredients':card.ingredients,'instructions':card.ingredients} for card in db_cards]
+		self.render('sep_3.html', cards=disp_cards)
+	def post(self):
+		card_json = json.loads(self.request.body)
+		try:
+			if(card_json.get('data').get('type') == 'new'):
+				template_card = {
+									'title':'title',
+									'ingredients':['first ingredient'],
+									'instructions':['step one']
+								}
+				r = RecipieCard(title = template_card['title'], ingredients = template_card['ingredients'],instructions = template_card['instructions'])
+				r.put()
+				response_json = {'data':{
+									'id':str(r.key()),
+									'title':template_card['title'],
+									'ingredients':template_card['ingredients'],
+									'instructions':template_card['instructions']
+								}}
+				self.response.headers['Content-Type'] = 'application/json'
+				self.response.out.write(json.dumps(response_json));
+			elif card_json.get('data').get('type') == 'update':
+				fields = card_json.get('data').get('fields')
+				r = RecipieCard.get(fields.get('id'))
+				r.title = fields.get('title')[0]
+				r.ingredients  = fields.get('ingredients')
+				r.instructions = fields.get('instructions')
+				r.put()
+		except:
+			print 'post error'
+		
+
+class Sep4Handler(Handler):
+	def get(self):
+		self.render('sep_4.html')
+
+class Sep5Handler(Handler):
+	def get(self):
+		self.render('sep_5.html')
+
+class Sep6Handler(Handler):
+	def get(self):
+		self.render('sep_6.html')
+
+class Sep7Handler(Handler):
+	def get(self):
+		self.render('sep_7.html')
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
@@ -349,8 +442,14 @@ app = webapp2.WSGIApplication([
 	('/30-AUG', Aug30Handler),
 	('/31-AUG', Aug31Handler),
 	('/1-SEP',  Sep1Handler),
+	('/2-SEP',  Sep2Handler),
+	('/3-SEP',  Sep3Handler),
+	('/4-SEP',  Sep4Handler),
+	('/5-SEP',  Sep5Handler),
+	('/6-SEP',  Sep6Handler),
+	('/7-SEP',  Sep7Handler),
 	('/json', JSONHandler),
-	('/.*',  MainHandler)
+	('/channelAPI',ChannelHandler)
 ], debug=True)
 
 

@@ -59,8 +59,42 @@ function random_array_elem (array) {
 	return array[Math.floor(Math.random()*array.length)];
 }
 
+function closest_elem (arr, elem, sorted, cmp_fn) {
+	if (sorted) {
+		console.log('NOT IMPLEMENTED');
+	} else {
+		var closest;
+		var closest_val;
+		if (cmp_fn) {
+			for (var i = 0; i < arr.length; i++) {
+				if (closest === undefined || Math.abs(cmp_fn(arr[i], elem)) < closest_val) {
+					closest_val = Math.abs(cmp_fn(arr[i], elem));
+					closest = i;
+				}
+			};
+		} else {
+			for (var i = 0; i < arr.length; i++) {
+				if (closest === undefined || Math.abs(arr[i] - elem) < closest_val) {
+					closest_val = Math.abs(arr[i] - elem);
+					closest = i;
+				}
+			};
+		}
+		
+		return closest;
+	}
+}
+
 function uniform_w_prob (probability) {
 	return (Math.random() < probability);
+}
+
+function normalize_float (num, floor, ceil) {
+	return (num - floor)/(ceil - floor);
+}
+
+function scale (num, floor, ceil) {
+	return num * (ceil - floor) + floor;
 }
 
 function addEventHandler(obj, evt, handler) {

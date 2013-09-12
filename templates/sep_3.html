@@ -1,0 +1,50 @@
+<!-- 365-pages by Joe Delgado. github.com/djoeman84 -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Recipies</title>
+	<link rel="stylesheet" type="text/css" href="./css/sep_3.css">
+</head>
+<body onload="init_js()">
+	<div id="new-card" class="recipie-card">
+		<a href="javascript:void(0)" onclick="new_card(this.parentNode)">+</a>
+	</div>
+	<div id="load-gif">
+		<img src="./img/load.gif">
+	</div>
+	{% for card in cards %}
+	<div id="{{ card.id }}" class="recipie-card">
+		<div class="top">
+			<div field="title" class="card-title edit"><h1>{{ card.title }}</h1></div>
+		</div>
+		<div class="bottom">
+			<div class="left">
+				<div class="card-img"></div>
+			</div>
+			<div class="right">
+				<div class="card-ingredients">
+					<div>Ingredients</div>
+					<ul field="ingredients" class="edit">
+						{% for ingredient in card.ingredients %}
+						<li>{{ ingredient }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="card-instructions">
+					<div>Instructions</div>
+					<ul field="instructions" class="edit">
+						{% for instruction in card.instructions %}
+						<li>{{ instruction }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<a href="javascript:void(0)" class="button" onclick="edit('{{ card.id }}')">edit</a>
+		<a href="javascript:void(0)" class="button" onclick="save('{{ card.id }}')">save</a>
+	</div>
+	{% endfor %}
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script src="./js/sep_3.js" type="text/javascript"></script>
+</body>
+</html>
