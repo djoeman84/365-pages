@@ -27,6 +27,9 @@ handlers:
 - url: /audio
   static_dir: assets/audio
 
+- url: /json
+  static_dir: assets/json
+
 - url: .*
   script: main.app
 

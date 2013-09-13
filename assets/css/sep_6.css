@@ -1,3 +1,35 @@
 /*
 	365-pages by Joe Delgado. github.com/djoeman84
 */
+html, body {
+	margin: 0;
+	height: 100%;
+	font-family: "HelveticaNeue-UltraLight", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+	form#zip-form {
+		display: none;
+	}
+
+	input#zip-input {
+		position: fixed;
+		left: 50%;
+		width: 300px;
+		margin-left: -150px;
+		font-size: 30px;
+		text-align: center;
+		outline: none;
+		border: none;
+		background-color: transparent;
+		border-bottom: 1px solid #F0F0F0;
+		color: gray;
+		font-family: inherit;
+		margin-top: 30px;
+	}
+
+	div#canvas-wrapper {
+		height: 100%;
+		width: 100%;
+	}
+
+
