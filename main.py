@@ -204,9 +204,9 @@ class ChannelHandler(Handler):
 	def post(self):
 		api         = self.request.get("api")
 		key         = self.request.get("key")
-		print self.request.body
-		for channel_id in channels[api+key]:
-			channel.send_message(channel_id, self.request.body)
+		if api+key in channels:
+			for channel_id in channels[api+key]:
+				channel.send_message(channel_id, self.request.body)
 
 
 class Aug4Handler(Handler):

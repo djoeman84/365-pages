@@ -6,14 +6,27 @@ html, body {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
+	form#username-form {
+		position: fixed;
+		padding: 20px;
+		margin: 0;
+	}
+
+		input#username {
+			margin: 0;
+			padding-left: 5px;
+			font-size: 25px;
+		}
+
 	div#phone {
 		margin: auto;
 		width: 280px;
 		height: 450px;
 		margin-top: 1%;
-		padding: 60px 10px 70px 10px;
+		padding: 60px 10px 80px 10px;
 		background-color: black;
-		border-radius: 30px;
+		border: 2px solid gray;
+		border-radius: 35px;
 	}
 
 		div#messages-panel-wrapper {
@@ -41,22 +54,51 @@ html, body {
 					display: none;
 				}
 
-					li.message {
-						border-radius: 20px;
-						padding: 4px 12px;
-						margin: 3px 2px;
-						box-shadow: -2px 1px 10px rgba(0,0,0,.2);
+					#messages-ul > li {
+						position: relative;
+						min-height: 45px;
 					}
 
-					li.message.mine {
-						float: right;
-						background-color: lightblue;
+					#messages-ul > li.theirs {
+						margin-right: 40%;
 					}
 
-					li.message.theirs{
-						float: left;
-						background-color: LightGreen;
+					#messages-ul > li.mine {
+						margin-left: 40%;
 					}
+
+						div.meta {
+							font-size: 10px;
+							color: #D0D0D0;
+						}
+
+						div.meta.mine {
+							text-align: right;
+							margin-right: 10px;
+						}
+
+						div.meta.theirs {
+							text-align: left;
+							margin-left: 3px;
+						}
+
+						p.message {
+							border-radius: 20px;
+							padding: 4px 12px;
+							margin: 3px 2px;
+							box-shadow: 0px 1px 10px rgba(0,0,0,.2);
+							font-size: 15px;
+						}
+
+						p.message.mine {
+							/*float: right;*/
+							background-color: lightblue;
+						}
+
+						p.message.theirs{
+							/*float: left;*/
+							background-color: LightGreen;
+						}
 
 		div#messages-panel-wrapper > form {
 			border-top: 2px rgba(0, 0, 0, 0.1) solid;

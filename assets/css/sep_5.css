@@ -1,0 +1,12 @@
+/*
+	365-pages by Joe Delgado. github.com/djoeman84
+*/
+html, body {
+	margin: 0;
+}
+
+	#clear-button {
+		position: fixed;
+		top: 10px;
+		left: 10px;
+	}
