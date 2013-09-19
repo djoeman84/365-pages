@@ -1,3 +1,12 @@
 /*
 	365-pages by Joe Delgado. github.com/djoeman84
 */
+html, body {
+	margin: 0;
+	height: 100%;
+}
+
+	div#line-graph-hook {
+		height: 400px;
+		width: 100%;
+	}

@@ -19,8 +19,6 @@ from google.appengine.api import channel
 
 months = ["NONE","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]
 days_of_week = ["MON","TUE","WED","THR","FRI","SAT","SUN"]
-password = "07c05679b1cfed895de0d8383a02cafb7a040d5db41878fa2c47103fe7aba541"
-username = "imgur"
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(autoescape=True,
@@ -45,9 +43,13 @@ def safe_get_list(arg_list, index, default=None):
 		return default
 
 CACHE = {}
-def cached_query(query, fetch_quant = 10, refresh = True):
+def cached_query(query, fetch_quant = 10, refresh = True, **kwargs):
+	print kwargs
 	if (query,fetch_quant) not in CACHE or refresh:
-		CACHE[(query,fetch_quant)] = db.GqlQuery(query).fetch(limit=fetch_quant)
+		if (kwargs):
+			CACHE[(query,fetch_quant)] = db.GqlQuery(query, **kwargs).fetch(limit=fetch_quant)
+		else:
+			CACHE[(query,fetch_quant)] = db.GqlQuery(query).fetch(limit=fetch_quant)
 	return CACHE[(query,fetch_quant)]
 
 
@@ -72,6 +74,12 @@ class RecipieCard(db.Model):
 	title        = db.StringProperty(required = True)
 	ingredients  = db.StringListProperty (required = True)
 	instructions = db.StringListProperty (required = True)
+
+class AdminAccount(db.Model):
+	password = db.StringProperty(required = True)
+	username = db.StringProperty(required = True)
+	name     = db.StringProperty(required = True)
+	time_created = db.DateTimeProperty(auto_now_add = True)
 
 
 class Handler(webapp2.RequestHandler):
@@ -101,6 +109,8 @@ def get_info(refresh=False):
 
 class MainHandler(Handler):
 	def render_page(self):
+		a = AdminAccount(username = 'a', password = 'a', name = 'a')
+		a.put()
 		data, month_anchors, days = get_info()
 		self.render("index.html", days = days, data = data, month_anchors = month_anchors)
 	def get(self):
@@ -110,7 +120,10 @@ class PostHandler(Handler):
 	def get(self):
 		refresh = self.request.get("refresh")
 		posts = cached_query(query='SELECT * FROM Post ORDER BY target_date ASC', fetch_quant = 366, refresh = True)
-		likely_date = posts[len(posts) - 1].target_date + datetime.timedelta(days = 1)
+		if (len(posts)):
+			likely_date = posts[len(posts) - 1].target_date + datetime.timedelta(days = 1)
+		else:
+			likely_date = datetime.datetime.now()
 		self.render("post.html", error="", t_date=likely_date.strftime('%Y-%m-%d'))
 	def post(self):
 		title  = self.request.get("title")
@@ -120,8 +133,9 @@ class PostHandler(Handler):
 		usr    = self.request.get("usr")
 		passw  = self.request.get("pass")
 		t_date = self.request.get("target_date")
-		print "\n\ntzone: " + str(tzone)
-		if (not passw == password) or (not usr == username):
+		admin_account = cached_query(query = "SELECT * FROM AdminAccount WHERE password = :password AND username = :username", fetch_quant = 1, refresh = True, password = passw, username = usr)
+		print admin_account
+		if (admin_account == []):
 			error = "incorrect password"
 			self.render("post.html", error=error)
 			return
@@ -208,19 +222,6 @@ class ChannelHandler(Handler):
 			for channel_id in channels[api+key]:
 				channel.send_message(channel_id, self.request.body)
 
-
-class Aug4Handler(Handler):
-	def get(self):
-		self.render("aug_4.html")
-
-class Aug5Handler(Handler):
-	def get(self):
-		self.render("aug_5.html")
-
-class Aug6Handler(Handler):
-	def get(self):
-		self.render("aug_6.html")
-
 class Aug7Handler(Handler):
 	def get(self):
 		self.render("aug_7.html")
@@ -256,33 +257,6 @@ class Aug8Handler(Handler):
 		self.response.headers.add_header('Set-Cookie', 'visits='+new_cookie)
 		self.render("aug_8.html", visits=visits)
 
-class Aug9Handler(Handler):
-	def get(self):
-		self.render('aug_9.html')
-
-class Aug10Handler(Handler):
-	def get(self):
-		self.render('aug_10.html')
-
-class Aug11Handler(Handler):
-	def get(self):
-		self.render('aug_11.html')
-
-class Aug12Handler(Handler):
-	def get(self):
-		self.render('aug_12.html')
-
-class Aug13Handler(Handler):
-	def get(self):
-		self.render('aug_13.html')
-
-class Aug14Handler(Handler):
-	def get(self):
-		self.render('aug_14.html')
-
-class Aug15Handler(Handler):
-	def get(self):
-		self.render('aug_15.html')
 
 nyt_api_key = 'b1ee2e9937cc362be3892ed1e2ea0eff:0:58566570'
 nyt_json_url = 'http://api.nytimes.com/svc/search/v2/articlesearch.json?fq=romney&begin_date=20120101&end_date=20120101&facet_field=day_of_week&fl=keywords&api-key='+nyt_api_key
@@ -291,74 +265,6 @@ class Aug16Handler(Handler):
 		data = json.load(urllib2.urlopen(nyt_json_url))
 		nyt_json = [kw['value'] for entries in data['response']['docs'] for kw in entries['keywords'] if kw['name'] == 'glocations']
 		self.render('aug_16.html', nyt_json = ",".join(['"'+entry+'"' for entry in nyt_json]), num_res = len(data['response']['docs']))
-
-class Aug17Handler(Handler):
-	def get(self):
-		self.render('aug_17.html')
-
-class Aug18Handler(Handler):
-	def get(self):
-		self.render('aug_18.html')
-
-class Aug19Handler(Handler):
-	def get(self):
-		self.render('aug_19.html')
-
-class Aug20Handler(Handler):
-	def get(self):
-		self.render('aug_20.html')
-
-class Aug21Handler(Handler):
-	def get(self):
-		self.render('aug_21.html')
-
-class Aug22Handler(Handler):
-	def get(self):
-		self.render('aug_22.html')
-
-class Aug23Handler(Handler):
-	def get(self):
-		self.render('aug_23.html')
-
-class Aug24Handler(Handler):
-	def get(self):
-		self.render('aug_24.html')
-
-class Aug25Handler(Handler):
-	def get(self):
-		self.render('aug_25.html')
-
-class Aug26Handler(Handler):
-	def get(self):
-		self.render('aug_26.html')
-
-class Aug27Handler(Handler):
-	def get(self):
-		self.render('aug_27.html')
-
-class Aug28Handler(Handler):
-	def get(self):
-		self.render('aug_28.html')
-
-class Aug29Handler(Handler):
-	def get(self):
-		self.render('aug_29.html')
-
-class Aug30Handler(Handler):
-	def get(self):
-		self.render('aug_30.html')
-
-class Aug31Handler(Handler):
-	def get(self):
-		self.render('aug_31.html')
-
-class Sep1Handler(Handler):
-	def get(self):
-		self.render('sep_1.html')
-
-class Sep2Handler(Handler):
-	def get(self):
-		self.render('sep_2.html')
 
 class Sep3Handler(Handler):
 	def get(self):
@@ -395,61 +301,29 @@ class Sep3Handler(Handler):
 			print 'post error'
 		
 
-class Sep4Handler(Handler):
+class SimpleHandler(Handler):
 	def get(self):
-		self.render('sep_4.html')
-
-class Sep5Handler(Handler):
+		path = self.request.path
+		path = path.replace('/','')
+		arr  = path.split('-')
+		try:
+			self.render(arr[1].lower()+'_'+arr[0]+'.html')
+		except:
+			self.render('404.html')
+class ErrorHandler(Handler):
 	def get(self):
-		self.render('sep_5.html')
-
-class Sep6Handler(Handler):
-	def get(self):
-		self.render('sep_6.html')
-
-class Sep7Handler(Handler):
-	def get(self):
-		self.render('sep_7.html')
+		self.render('404.html')
 
 app = webapp2.WSGIApplication([
 	('/', MainHandler), ('/post', PostHandler),
-	('/4-AUG',  Aug4Handler),
-	('/5-AUG',  Aug5Handler),
-	('/6-AUG',  Aug6Handler),
 	('/7-AUG',  Aug7Handler),
 	('/8-AUG',  Aug8Handler),
-	('/9-AUG',  Aug9Handler),
-	('/10-AUG', Aug10Handler),
-	('/11-AUG', Aug11Handler),
-	('/12-AUG', Aug12Handler),
-	('/13-AUG', Aug13Handler),
-	('/14-AUG', Aug14Handler),
-	('/15-AUG', Aug15Handler),
 	('/16-AUG', Aug16Handler),
-	('/17-AUG', Aug17Handler),
-	('/18-AUG', Aug18Handler),
-	('/19-AUG', Aug19Handler),
-	('/20-AUG', Aug20Handler),
-	('/21-AUG', Aug21Handler),
-	('/22-AUG', Aug22Handler),
-	('/23-AUG', Aug23Handler),
-	('/24-AUG', Aug24Handler),
-	('/25-AUG', Aug25Handler),
-	('/26-AUG', Aug26Handler),
-	('/27-AUG', Aug27Handler),
-	('/28-AUG', Aug28Handler),
-	('/29-AUG', Aug29Handler),
-	('/30-AUG', Aug30Handler),
-	('/31-AUG', Aug31Handler),
-	('/1-SEP',  Sep1Handler),
-	('/2-SEP',  Sep2Handler),
 	('/3-SEP',  Sep3Handler),
-	('/4-SEP',  Sep4Handler),
-	('/5-SEP',  Sep5Handler),
-	('/6-SEP',  Sep6Handler),
-	('/7-SEP',  Sep7Handler),
 	('/json', JSONHandler),
-	('/channelAPI',ChannelHandler)
+	('/channelAPI',ChannelHandler),
+	('/[0-9]+-[A-Z]+', SimpleHandler),
+	('/.*', ErrorHandler)
 ], debug=True)
 
 
